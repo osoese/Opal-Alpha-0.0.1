@@ -1,0 +1,245 @@
+body {
+  font-family: sans-serif;
+  background-color: #66ff66;
+  background-image: linear-gradient(to top, #00cc00, #ccffcc 100%);
+  background-attachment: fixed;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  padding: 0;
+  margin: 0;
+
+  font-size: 14px;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100%;
+  background: white;
+}
+
+header {
+  background: #ccccff;
+  background-image: linear-gradient(to bottom, #8080ff, #e6e6ff 100%);
+  padding: 20px 15px 15px 15px;
+  position: relative;
+}
+
+#login-buttons {
+  display: block;
+}
+
+.tickers {
+  text-align:right;
+  font-size:10pt;
+}
+.tickers div{
+  display:inline;
+  padding:5px;
+}
+.tick-button{
+  cursor:pointer;
+  background-color: #ff6699;
+}
+
+h1 {
+  font-size: 1.2em;
+  margin: 10px;
+  display: inline-block;
+}
+
+h3 {
+  font-size: 1em;
+  margin: 10px;
+  display: inline-block;
+}
+
+form {
+  margin-top: 10px;
+  margin-bottom: -10px;
+  position: relative;
+}
+
+.new-task input {
+  box-sizing: border-box;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  width: 100%;
+  padding-right: 80px;
+  font-size: 1em;
+}
+
+.new-task input:focus{
+  outline: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  background: white;
+}
+
+.button {
+  background: #cccccc;
+  padding:2px;
+  margin:3px;
+}
+
+.delete {
+  float: right;
+  font-weight: bold;
+  background: none;
+  font-size: 1em;
+  border: none;
+  position: relative;
+}
+
+li {
+  font-size: 10pt;
+  position: relative;
+  list-style: none;
+  padding: 5px;
+  border-bottom: #eee solid 1px;
+}
+
+li .text {
+  margin-left: 10px;
+}
+
+li.checked {
+  color: #888;
+}
+
+li.checked .text {
+  text-decoration: line-through;
+}
+
+li.private {
+  background: #eee;
+  border-color: #ddd;
+}
+
+header .hide-completed {
+  float: right;
+}
+
+.toggle-private {
+  margin-left: 5px;
+}
+
+@media (max-width: 600px) {
+  li {
+    padding: 12px 15px;
+  }
+
+  .search {
+    width: 150px;
+    clear: both;
+  }
+
+  .new-task input {
+    padding-bottom: 5px;
+  }
+}
+
+.token_display {
+  padding:3px;
+}
+
+.accinput {
+  width:380px;
+}
+
+.accbutton {
+  border:1px solid black;
+  background-color: #cccccc;
+  padding:3px;
+  margin:3px;
+  width:auto;
+}
+
+.acchistory {
+  border:1px solid black;
+  background-color: #cccccc;
+  padding:3px;
+  margin:3px;
+  width:auto;
+}
+
+.wallet_panels {
+  background-color: #ccffcc;
+  padding:10px;
+  border: 1px solid #b3e6cc;
+  margin:5px;
+}
+
+.panel_label {
+  padding:3px;
+}
+
+.panel_input {
+  padding:3px;
+}
+
+.accounts_panel {
+  background: rgba(255, 255, 255, .5);
+  padding:3px;
+  margin:3px;
+}
+
+.sendellared {
+  color:#cccccc;
+  font-weight:bold;
+  border:1px solid black;
+  background-color: #ff0000;
+  padding:3px;
+  margin:3px;
+  width:auto;
+}
+
+.sendella {
+  color:#ffffff;
+  font-weight:bold;
+  border:1px solid black;
+  background-color: #33cc33;
+  padding:3px;
+  margin:3px;
+  width:auto;
+}
+
+.prepella {
+  border:1px solid black;
+  background-color: #cccccc;
+  padding:3px;
+  margin:3px;
+  width:auto;
+}
+
+.accsend {
+  width:380px;
+}
+
+.pksend {
+  width:505px;
+}
+
+.makewallet {
+  border:1px solid black;
+  background-color: #cccccc;
+  padding:3px;
+  margin:3px;
+  width:auto;
+}
+
+.ella_addr {
+  --background-color: #ccffeb;
+}
+.ella_addr:hover {
+  background-color: #66ffd9;
+}

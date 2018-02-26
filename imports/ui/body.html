@@ -1,0 +1,71 @@
+<body>
+  <div class="container">
+    <header>
+
+      <div class="tickers">
+        <div class="panel_label">Account | Ella</div>
+        <div>
+        {{#each tokens}}
+        <div> {{token}}
+          <span id="{{token}}_prc">
+            {{price}}
+          </span>
+        </div>
+        {{/each}}
+      </div>
+      </div>
+
+      <div class="accounts_panel">
+        <ul style="max-height:10vh; overflow:auto;">
+        {{#each currentElla}}
+          {{> wallet}}
+        {{/each}}
+        </ul>
+      </div>
+
+    </header>
+
+    <div class="panel_label">
+      <input class="button" type="button" name="gettix" value="GET TIX" />
+      {{#each tokens}}
+        {{> token}}
+      {{/each}}
+    </div>
+
+    <div class="wallet_panels">
+      <div class="panel_label">Address to Add / Update Wallet: </div>
+      <input id="accinput" class="accinput" type="text" name="walletaddr" />
+      <span class="accbutton">ACCOUNT</span>
+      <span class="acchistory">HISTORY</span>
+    </div>
+
+    <div class="wallet_panels">
+      <div class="panel_label">Receiver:</div>
+      <input id="accsend" class="accsend" type="text" name="walletdest" />
+      <div class="panel_label">Amount to Send: </div>
+      <input id="amtsend" class="amtsend" type="text" name="ellasendqty" />
+      <span class="prepella">PREPARE</span>
+      <div class="panel_label">Private Key: </div>
+      <span><input id="pksend" class="pksend" type="text" name="apprvsend" disabled /></span>
+      <span class="sendellared">SEND</span>
+    </div>
+
+    <div class="wallet_panels">
+      <div class="panel_label">Generate a New Wallet: <span class="makewallet">NEW</span></div>
+    </div>
+
+    <div class="wallet_panels">
+      <div class="panel_label">Transaction History:</div>
+      <div id="account_history"></div>
+    </div>
+
+  </div>
+</body>
+
+<template name="token">
+  <span class="token_display">{{token}} <span id="{{token}}">{{price}}</span></span>
+</template>
+
+<template name="wallet">
+  <li><span class="ella_addr" id="ella_addr_{{public}}">{{public}}</span> : <span id="ella_qty_{{public}}">{{qty}}</span></li>
+</template>
