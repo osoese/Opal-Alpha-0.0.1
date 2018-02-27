@@ -3,6 +3,17 @@ Ellaism Opal Wallet Alpha 0.0.1
 
 DRAFT WELCOME PAGE THIS IS ALPHA SOFTWARE PLEASE USE WITH CAUTION AND READ THE SEND FUNCTION CAUTION BELOW (It sends when you enter your private key so make sure you have it all correct before hitting the prepare button)
 
+To compile meteor app:
+
+Navigate to a directory that will hold the project
+
+$git clone https://github.com/osoese/Opal-Alpha-0.0.1
+
+$meteor create .
+
+[there is a small error on the ticker code to fix if you install before done]
+
+
 This is the Opal Wallet Alpha release which means it is has features that a developer would use correctly mainly because the developer is only hitting the sequence of buttons to get the desired feature to work. While the developer of this wallet did use it with wallets that held significant enough funds so as to not be reckless, unintended results may happen. Therefore caution is advised. For this reason the local data repository does not hold a private key. This wallet will generate and save the "seed expression" which can derive the private key pretty easily, but it also will generate a PDF printout with the private key and address. Print this and back it up in a safe location (offline). The author's preference would be for you to always save every key offline only using them when needed. The reality is that we have grown accustomed to  keeping wallet accounts on desktops and hardware devices even ones readily connected to the internet. A future release will hold the private keys if a request is made for this function. For now, transactions are forged "offline" and signed with your private key then broadcast to the internet very similarly to if you were using the My Ella Wallet application (or My Ether Wallet on the Ellaism chain).
 
 This is a meteor application very similarly set up to the Mist wallet. You will begin by either:
