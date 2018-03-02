@@ -21,12 +21,12 @@ Template.body.helpers({
   tokens() {
     return Tokens.find({});
   },
-  /*******returns one ticker and is not being used right now**********************
+  //******returns one ticker and is not being used right now**********************
   currentTickerDisplay(){
     return Tokens.findOne({});
     //return "BTC: 0.01";
   },
-  ********************************************************************************/
+  //******************************************************************************/
   //returns wallet and balance for now and will be expanded to all wallet info
   currentElla(){
     return Wallets.find();
@@ -127,9 +127,10 @@ Template.body.events({
     console.log("Write ths PK down: "+privateKeyRaw);
     Wallet = ethers.Wallet;
     wallet = new Wallet(privateKeyRaw);
-    alert(wallet.address);
-    console.log("Write down your address: "+wallet.address);
-    txPanel.innerHTML = txPanel.innerHTML + "<div>Write down your address: </div><div>" + wallet.address + "</div>";
+    var newWalletAddress = wallet.address.toLowerCase();
+    alert(newWalletAddress);
+    console.log("Write down your address: "+newWalletAddress);
+    txPanel.innerHTML = txPanel.innerHTML + "<div>Write down your address: </div><div>" + newWalletAddress + "</div>";
 
 
     //testing write a pdf
@@ -163,7 +164,7 @@ Template.body.events({
     //end testing PDF
 
 
-    Meteor.call('wallets.insert',wallet.address,0,privateKeyGeneratorTerm);
+    Meteor.call('wallets.insert',newWalletAddress,0,privateKeyGeneratorTerm);
   }
 
 });
@@ -273,7 +274,7 @@ Template.body.events({
 });
 
 Template.body.events({
-  'click .button' (event) {
+  'click .button_tix' (event) {
 
     //*****************hardcoded for ELLA but will be dynamic in future*********************
     var url = 'https://min-api.cryptocompare.com/data/price?fsym=ELLA&tsyms=BTC,USD,EUR,ETH';
