@@ -34,8 +34,9 @@ Template.body.helpers({
   }
 });
 
+
 Template.body.events({
-  'click .accbutton,.ella_addr' (event) {
+  "click [data-action='accbutton/account'],.ella_addr" (event) {
     var walletaddr = document.getElementsByClassName("accinput")[0].value.toLowerCase();
     console.log(document.getElementsByClassName("accinput")[0].value + " - " + walletaddr);
 
@@ -77,9 +78,14 @@ Template.body.events({
 });
 
 Template.body.events({
-  'click .acchistory' (event) {
+  "click [data-action='accbutton/history']" (event) {
     const search_address = document.getElementsByClassName("accinput")[0].value;
-
+    if (search_address == ""){
+      //for now this is to trap no wallet but will get all wallet history in future
+      console.log("No address selected....rollover a wallet");
+      document.getElementById("account_history").innerText = "No address selected....rollover a wallet and click again";
+      return
+    }
     web3.eth.getTransactionCount(search_address)
     .then(function(tx){
       document.getElementById("account_history").innerText = "transactions:"+tx;
@@ -103,8 +109,7 @@ genRandomNumbers = function getRandomNumbers() {
 };
 
 Template.body.events({
-  'click .makewallet' (event) {
-
+  "click [data-action='wallet/create']" (event) {
 
     //writing to tx panel for now eventually to file or save pk not sure yet
     var txPanel = document.getElementById("account_history");
@@ -180,7 +185,7 @@ function checkPK(pk){
 }
 
 Template.body.events({
-  'click .prepella' (event) {
+  "click [data-action='send/prepella']" (event) {
 
     //address to send fromW
     console.log("from: " + document.getElementById("accinput").value + " to: "+ document.getElementById("accsend").value + " we are sending " + document.getElementById("amtsend").value);
@@ -220,11 +225,21 @@ Template.body.events({
       document.getElementById("account_history").innerText = "private key is not correct for wallet edit and prepare again";
       return;
     }else{
-      document.getElementsByClassName("sendellared")[0].className = "sendella";
+      document.getElementById("pksendbtn").className = "btn btn-positive";
       //right now just going to send here but need to activate green button as confirmation to send
       //and post the transaction in the innertext next line for confirmation
-      document.getElementById("account_history").innerText = "Did it correct and now sending (warned you)....";
+      document.getElementById("account_history").innerText = "activating Send button....Review your tx then hit send to confirm";
     }
+
+    alert("Your tx is prepared. Review and confirm BEFORE you hit the send button because this action is irreversible. Hit send to continue...");
+
+  }
+});
+
+Template.body.events({
+  "click [data-action='send/pksend']" (event){
+
+    alert("You are sending....");
 
     web3.eth.accounts.signTransaction({ to: document.getElementById("accsend").value, value: amount, gas: 2000000 }
     , privateKey)
@@ -236,28 +251,28 @@ Template.body.events({
     .catch(function(rawtxError){
         console.log('Hmm.. there was an error: '+ String(rawtxError));
     });
-        /*****test code for alternate trial efforts****************************
-        var transaction = {
-          from: wallet2.address,
-          to: document.getElementById("accsend").value,
-          value: amount,
-          gas: gasPrice,
-          nonce: number
-        };
-        web3.eth.sendTransaction(transaction, function(err, transactionHash) {
-          if (!err){
-            console.log(transactionHash);
-          }else{
-            console.log(err);
-          }
+    /*****test code for alternate trial efforts****************************
+    var transaction = {
+      from: wallet2.address,
+      to: document.getElementById("accsend").value,
+      value: amount,
+      gas: gasPrice,
+      nonce: number
+    };
+    web3.eth.sendTransaction(transaction, function(err, transactionHash) {
+      if (!err){
+        console.log(transactionHash);
+      }else{
+        console.log(err);
+      }
 
-        });
-        *********************************************************************/
+    });
+    *********************************************************************/
   }
 });
 
 Template.body.events({
-  'mouseover .ella_addr' (event) {
+  'mouseover .ella_addr' (event){
         document.getElementsByClassName("accinput")[0].value = event.target.innerText;
         //var aa = document.getElementById("btc_prc").innerText;
         //var bb = document.getElementById("ella_qty_"+event.target.innerText).innerText;
@@ -274,7 +289,7 @@ Template.body.events({
 });
 
 Template.body.events({
-  'click .button_tix' (event) {
+  "click [data-action='accbutton/wallet']" : function() {
 
     //*****************hardcoded for ELLA but will be dynamic in future*********************
     var url = 'https://min-api.cryptocompare.com/data/price?fsym=ELLA&tsyms=BTC,USD,EUR,ETH';

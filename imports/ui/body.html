@@ -1,65 +1,82 @@
 <body>
+
   <div class="container">
-    <header>
 
-      <div class="tickers">
-        <div class="panel_label">Account | Ella</div>
-        <div>
-        {{#each tokens}}
-        <div> {{token}}
-          <span id="{{token}}_prc">
-            {{price}}
-          </span>
+        <header>
+
+          <div class="tickers">
+            <div class="panel_label">Account | Ella</div>
+            <div>
+            {{#each tokens}}
+            <div> {{token}}
+              <span id="{{token}}_prc">
+                {{price}}
+              </span>
+            </div>
+            {{/each}}
+          </div>
+          </div>
+
+          <div class="accounts_panel">
+            <ul class="wallets">
+            {{#each currentElla}}
+              {{> wallet}}
+            {{/each}}
+            </ul>
+          </div>
+
+        </header>
+
+        <div class="panel_label">
+          <button type="button" class="btn btn-default" data-action="accbutton/wallet" name="gettix" value="GET TIX">
+            <span class="icon icon-arrows-ccw"></span>
+          </button>
+          <!--<input class="button_tix" type="button" name="gettix" value="GET TIX" />-->
+          {{#each tokens}}
+            {{> token}}
+          {{/each}}
         </div>
-        {{/each}}
-      </div>
-      </div>
 
-      <div class="accounts_panel">
-        <ul style="max-height:10vh; overflow:auto;">
-        {{#each currentElla}}
-          {{> wallet}}
-        {{/each}}
-        </ul>
-      </div>
+        <div class="wallet_panels">
+          <div class="panel_label">Address to Add / Update Wallet: </div>
+          <input id="accinput" class="accinput" type="text" name="walletaddr" />
+          <button type="button" class="btn btn-default" data-action="accbutton/account" name="updacct" value="Update or Add Account">
+            Account
+          </button>
+          <button type="button" class="btn btn-default" data-action="accbutton/history" name="hstacct" value="Transaction History">
+            History
+          </button>
+        </div>
 
-    </header>
+        <div class="wallet_panels">
+          <div class="panel_label">Receiver:</div>
+          <input id="accsend" class="accsend" type="text" name="walletdest" />
+          <div class="panel_label">Amount to Send: </div>
+          <input id="amtsend" class="amtsend" type="text" name="ellasendqty" />
+          <button type="button" class="btn btn-default" data-action="send/prepella" name="prepsend" value="Prepare Send Tx">
+            Prepare
+          </button>
+          <div class="panel_label">Private Key: </div>
+          <span><input id="pksend" class="pksend" type="text" name="apprvsend" disabled /></span>
+          <button id="pksendbtn" type="button" class="btn btn-negative" data-action="send/pksend" name="pksend" value="Approve Transaction">
+            Send
+          </button>
+        </div>
 
-    <div class="panel_label">
-      <input class="button_tix" type="button" name="gettix" value="GET TIX" />
-      {{#each tokens}}
-        {{> token}}
-      {{/each}}
-    </div>
+        <div class="wallet_panels">
+            Generate a New Wallet:
+            <button id="createwallet" type="button" class="btn btn-default" data-action="wallet/create" name="createwallet" value="Create a New Weallet">
+              New
+            </button>
+        </div>
 
-    <div class="wallet_panels">
-      <div class="panel_label">Address to Add / Update Wallet: </div>
-      <input id="accinput" class="accinput" type="text" name="walletaddr" />
-      <span class="accbutton">ACCOUNT</span>
-      <span class="acchistory">HISTORY</span>
-    </div>
-
-    <div class="wallet_panels">
-      <div class="panel_label">Receiver:</div>
-      <input id="accsend" class="accsend" type="text" name="walletdest" />
-      <div class="panel_label">Amount to Send: </div>
-      <input id="amtsend" class="amtsend" type="text" name="ellasendqty" />
-      <span class="prepella">PREPARE</span>
-      <div class="panel_label">Private Key: </div>
-      <span><input id="pksend" class="pksend" type="text" name="apprvsend" disabled /></span>
-      <span class="sendellared">SEND</span>
-    </div>
-
-    <div class="wallet_panels">
-      <div class="panel_label">Generate a New Wallet: <span class="makewallet">NEW</span></div>
-    </div>
-
-    <div class="wallet_panels">
-      <div class="panel_label">Transaction History:</div>
-      <div id="account_history"></div>
-    </div>
+        <div class="wallet_panels">
+          <div class="panel_label">Transaction History:</div>
+          <div id="account_history"></div>
+        </div>
 
   </div>
+
 </body>
 
 <template name="token">
