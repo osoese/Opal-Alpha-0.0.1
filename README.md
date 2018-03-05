@@ -7,6 +7,10 @@ Note: I am using the convention that the user types into the command line interf
 
 To compile and run Opal Alpha 0.0.1 meteor app:
 
+First install node and meteor (possibly using this link for meteor installer is easiest): https://www.meteor.com/install
+
+then:
+
 $git clone https://github.com/osoese/Opal-Alpha-0.0.1
 
 $cd ~/Opal-Alpha-0.0.1
