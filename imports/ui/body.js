@@ -6,10 +6,10 @@ import './body.html';
 import ethers from 'ethers';//ethers makes a few things easier right now with wallet creation
 
 var Web3 = require("web3");
-//var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 //var web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/<add your own key kere>'));
-var web3 = new Web3(new Web3.providers.HttpProvider('https://jsonrpc.ellaism.org'));
-var web3Provider = new ethers.providers.Web3Provider(web3.currentProvider);//for ethers
+//var web3 = new Web3(new Web3.providers.HttpProvider('https://jsonrpc.ellaism.org'));
+var web3Provider = new ethers.providers.Web3Provider("http://localhost:8545");//for ethers
 //var web3 = new Web3(new Web3.providers.HttpProvider(Web3.defaultProvider));
 //var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 //console.log(web3.version);
@@ -194,6 +194,7 @@ Template.body.events({
     var privateKey = pkSend.value;
     var walletAddress = document.getElementById("accinput").value;
     var amount = web3.utils.toWei(document.getElementById("amtsend").value,'ether');
+    console.log("the amount is"+amount);
 
     //this was the old ether code and I added back in ethers so kep it
     //var wallet2 = new ethers.Wallet(privateKey);
@@ -238,8 +239,10 @@ Template.body.events({
 
 Template.body.events({
   "click [data-action='send/pksend']" (event){
-
-    alert("You are sending....");
+    var amount = web3.utils.toWei(document.getElementById("amtsend").value,'ether');
+    var pkSend = document.getElementById("pksend");
+    var privateKey = pkSend.value;
+    alert("You are sending "+amount+".... ....");
 
     web3.eth.accounts.signTransaction({ to: document.getElementById("accsend").value, value: amount, gas: 2000000 }
     , privateKey)
