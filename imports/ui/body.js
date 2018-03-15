@@ -13,7 +13,7 @@ var web3Provider = new ethers.providers.Web3Provider("http://localhost:8545");//
 //var web3 = new Web3(new Web3.providers.HttpProvider(Web3.defaultProvider));
 //var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 //console.log(web3.version);
-
+//this comment is because github had a glitch
 //components on main wallet meteor page
 Template.body.helpers({
   //returns all the tokens for gerneral price info compared to target currency
