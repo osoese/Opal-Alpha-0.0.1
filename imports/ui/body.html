@@ -5,7 +5,7 @@
         <header>
 
           <div class="tickers">
-            <div class="panel_label">Account | Ella</div>
+            <div class="panel_label"><img src="/img/egemlogosmall2.png" style="height:20px;" /><span style="padding-left:20px;padding-right:5px;">EGEM</span></div>
             <div>
             {{#each tokens}}
             <div> {{token}}
@@ -32,9 +32,19 @@
             <span class="icon icon-arrows-ccw"></span>
           </button>
           <!--<input class="button_tix" type="button" name="gettix" value="GET TIX" />-->
+
           {{#each tokens}}
             {{> token}}
           {{/each}}
+
+          <span style="visibility:hidden; float:right;" id="events">
+            <button type="button" class="btn btn-negative" data-action="accbutton/delete" name="waldel" value="DELETE">
+              Delete
+            </button>
+            <button type="button" class="btn btn-warning" data-action="accbutton/export" name="waldel" value="DELETE">
+              Export
+            </button>
+          </span>
         </div>
 
         <div class="wallet_panels">
@@ -80,9 +90,19 @@
 </body>
 
 <template name="token">
-  <span class="token_display">{{token}} <span id="{{token}}">{{price}}</span></span>
+  <span class="token_display">
+    {{token}}
+    <span id="{{token}}">{{price}}</span>
+  </span>
 </template>
 
 <template name="wallet">
-  <li><span class="ella_addr" id="ella_addr_{{public}}">{{public}}</span> : <span id="ella_qty_{{public}}">{{qty}}</span></li>
+
+  <li id="wrap_{{public}}">
+    <span><input type="checkbox" id="del_{{public}}" data-action="accbutton/settings" /></span>
+    <span class="ella_addr" id="ella_addr_{{public}}">{{public}}</span>
+     :
+    <span id="ella_qty_{{public}}">{{qty}}</span>
+  </li>
+
 </template>

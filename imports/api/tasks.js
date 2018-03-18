@@ -1,7 +1,8 @@
 /****
-OPAL WALLET for ELLA by OSOESE 2018 to be released under MIT license or whatever community thinks best
+OPAL WALLET for EGEM by OSOESE 2018 to be released under MIT license or whatever community thinks best
 Light wallet with core functionality api built on meteor / electron to ease of use
 This is ALPHA software and is my first meteor electon app use at your own risk until tested for security
+TABS not SPACES where possible my friends
 ****/
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
@@ -9,6 +10,7 @@ import { check } from 'meteor/check';//need to explore functionallity of check
 
 export const Tokens = new Mongo.Collection('ethereum_price_ticker');//collection for price conversion
 export const Wallets = new Mongo.Collection('ella_wallets');//collection for local wallets
+export const Wallets_del = new Mongo.Collection('ella_wallets_del');
 //todo need export of local wallets
 
 Meteor.methods({
@@ -44,12 +46,23 @@ Meteor.methods({
       );
 
     },
+    //Wallets temporary Mongo do hold delete tokens
+    'wallets_del.insert'(id, address) {
+      Wallets_del.update(
+        { public : address },
+        {
+          id: id,
+          public: address
+        },
+        { upsert: true }
+      );
+    },
 
-  /*****maintaining these function to add delete capability down the road
-  'tasks.remove'(taskId) {
-    check(taskId, String);
+  //deleteing
+  'wallets_del.remove'(id) {
+    //check(id, String);
 
-    Tasks.remove(taskId);
+    Wallets_del.remove({"id":id});
   },
   /*****a function for checking off tasks in the meteor demo that can be modified
   'tasks.setChecked'(taskId, setChecked) {

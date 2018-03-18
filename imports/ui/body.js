@@ -1,15 +1,17 @@
+//can all of this be condensed to one line?
 import { Template } from 'meteor/templating';
 import { Tokens } from '/imports/api/tasks.js';
 import { Wallets } from '/imports/api/tasks.js';
+import { Wallets_del } from '/imports/api/tasks.js';
 
 import './body.html';
 import ethers from 'ethers';//ethers makes a few things easier right now with wallet creation
 
 var Web3 = require("web3");
-var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+var web3 = new Web3(new Web3.providers.HttpProvider("https://jsonrpc.egem.io/custom"));
 //var web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/<add your own key kere>'));
 //var web3 = new Web3(new Web3.providers.HttpProvider('https://jsonrpc.ellaism.org'));
-var web3Provider = new ethers.providers.Web3Provider("http://localhost:8545");//for ethers
+var web3Provider = new ethers.providers.Web3Provider("https://jsonrpc.egem.io/custom");//for ethers
 //var web3 = new Web3(new Web3.providers.HttpProvider(Web3.defaultProvider));
 //var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 //console.log(web3.version);
@@ -31,7 +33,13 @@ Template.body.helpers({
   currentElla(){
     return Wallets.find();
     //return Wallets.find({}).map(function (a){ return a.qty; });//just some testing code
-  }
+  },
+  //******returns one ticker and is not being used right now**********************
+  currentWalletDisplay(addr){
+    return Wallets.find({public:addr});
+    //return "BTC: 0.01";
+  },
+
 });
 
 
@@ -184,6 +192,51 @@ function checkPK(pk){
   }
 }
 
+var elCount = Array(2);
+function toggleDisplay(el,multi,inc,str){
+  console.log(elCount[el.id] + " el-id:" + el.id + " the str: "+str);
+  //console.log("the db entry" + JSON.stringify(Wallets.find({"public":str}).fetch()));
+  var testObj = Wallets.find({"public":str}).fetch();
+  console.log("database");
+  //first I will prove correct data set is aquired
+  console.log(JSON.stringify(testObj));
+  //these outputs all show undefined but clearly ae there from the stringiy output
+
+  console.log("IN LIST "+testObj[0]["public"] + "with id of "+testObj[0]["_id"]+ " database save ");
+
+
+  if(typeof elCount[el.id] != "undefined"){
+    console.log("here to increment elcount:" + elCount);
+    var current = elCount[el.id];
+    if(inc == "inc"){
+      current++;
+      Meteor.call('wallets_del.insert',testObj[0]["_id"],testObj[0]["public"]);
+    }else{
+      current--;
+      //Wallets_del.remove({"_id":testObj[0]["_id"]});
+      Meteor.call('wallets_del.remove',testObj[0]["_id"]);
+      console.log("deleted?");
+    }
+    elCount[el.id] = current;
+  }else{
+    elCount = [el.id];
+    elCount[el.id] = [1];
+    console.log("here to SET elcount:" + elCount[el.id]);
+    Meteor.call('wallets_del.insert',testObj[0]["_id"],testObj[0]["public"]);
+  };
+  //elCount[el.id] = [0]:elCount[el.id] = elCount[el.id]++
+  console.log("value in first element: "+elCount[el.id]);
+  //multi is a flag to see if ther was more than one trigger and some are still open
+  //console.log(el.id + "multi:" +multi);
+  //(multi)?multi=true:multi=false;
+  //console.log(el.id + "multi:" +multi);
+  if(elCount[el.id] > 0){
+    el.style.visibility = 'visible';
+  }else{
+    el.style.visibility = 'hidden';
+  }
+}
+
 Template.body.events({
   "click [data-action='send/prepella']" (event) {
 
@@ -288,6 +341,47 @@ Template.body.events({
         var ethPrice = (document.getElementById("eth_prc").innerText * document.getElementById("ella_qty_"+event.target.innerText).innerText);
         document.getElementById("eth").innerText = ethPrice.toPrecision(6);
         //document.getElementById("btc").innerText = "";
+  }
+});
+
+Template.body.events({
+  "mouseover [data-action='accbutton/settings']" (event){
+    //first we can hover and select one or multiple accounts
+    //console.log("going to select account: "+event.target.id+" and "+event.target.parentElement.parentElement.id+"end");
+    //need to make sure not already selected
+    console.log("going to select account: "+event.target.id+" and "+event.target.parentElement.parentElement.id+"end");
+    if (!event.target.checked){
+      event.target.parentElement.parentElement.style.backgroundColor="#e4ebfd";
+    }
+
+  },
+  "mouseout [data-action='accbutton/settings']" (event){
+    //first we can hover and select one or multiple accounts
+    //console.log("going to select account: "+event.target.id+" and "+event.target.parentElement.parentElement.id+"end");
+    //need to make sure not already selected
+    if (!event.target.checked){
+      event.target.parentElement.parentElement.style.backgroundColor="";
+    }
+
+
+  },
+  "click [data-action='accbutton/settings']" (event){
+    if (event.target.checked){
+      toggleDisplay(document.getElementById("events"),"","inc",event.target.id.replace("del_",""));
+      console.log("checked account add to list: "+event.target.id+" and "+event.target.parentElement.parentElement.id+"end");
+      event.target.parentElement.parentElement.style.backgroundColor="#8987df";
+    }else{
+      toggleDisplay(document.getElementById("events"),"","dec",event.target.id.replace("del_",""));
+      console.log("un checked");
+      event.target.parentElement.parentElement.style.backgroundColor="#e4ebfd";
+    }
+
+  },
+  "click [data-action='accbutton/delete']" (event){
+    console.log("hahahahaha we gonna delete!");
+  },
+  "click [data-action='accbutton/export']" (event){
+    console.log("hahahahaha we gonna do some export!");
   }
 });
 
