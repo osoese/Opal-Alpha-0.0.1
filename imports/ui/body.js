@@ -6,7 +6,7 @@ import { Wallets_del } from '/imports/api/tasks.js';
 
 import './body.html';
 import ethers from 'ethers';//ethers makes a few things easier right now with wallet creation
-
+var FileSaver = require('file-saver');
 var Web3 = require("web3");
 var web3 = new Web3(new Web3.providers.HttpProvider("https://jsonrpc.egem.io/custom"));
 //var web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/<add your own key kere>'));
@@ -382,6 +382,8 @@ Template.body.events({
   },
   "click [data-action='accbutton/export']" (event){
     console.log("hahahahaha we gonna do some export!");
+    var blob = new Blob([JSON.stringify(Wallets_del.find())], {type: "text/plain;charset=utf-8"});
+    FileSaver.saveAs(blob, "hello world.txt");
   }
 });
 
