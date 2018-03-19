@@ -378,12 +378,14 @@ Template.body.events({
 
   },
   "click [data-action='accbutton/delete']" (event){
-    console.log("hahahahaha we gonna delete!");
+    console.log("Going to add a confirm function here too but for now we are deleting");
+    var loopDelete = Wallets_del.find().forEach( function(myDoc) {Meteor.call('wallets.remove',myDoc.id);} );
+    //while(Wallets_del.find)
   },
   "click [data-action='accbutton/export']" (event){
-    console.log("hahahahaha we gonna do some export!");
+    console.log("File exported as Wallet Export.txt save as name of your choice");
     var blob = new Blob([JSON.stringify(Wallets_del.find())], {type: "text/plain;charset=utf-8"});
-    FileSaver.saveAs(blob, "hello world.txt");
+    FileSaver.saveAs(blob, "WalletExport.txt");
   }
 });
 

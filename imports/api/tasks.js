@@ -46,6 +46,11 @@ Meteor.methods({
       );
 
     },
+    'wallets.remove'(id) {
+      //check(id, String);
+
+      Wallets.remove({"_id":id});
+    },
     //Wallets temporary Mongo do hold delete tokens
     'wallets_del.insert'(id, address) {
       Wallets_del.update(
@@ -58,12 +63,12 @@ Meteor.methods({
       );
     },
 
-  //deleteing
-  'wallets_del.remove'(id) {
-    //check(id, String);
+    //deleteing
+    'wallets_del.remove'(id) {
+      //check(id, String);
 
-    Wallets_del.remove({"id":id});
-  },
+      Wallets_del.remove({"id":id});
+    },
   /*****a function for checking off tasks in the meteor demo that can be modified
   'tasks.setChecked'(taskId, setChecked) {
     check(taskId, String);
