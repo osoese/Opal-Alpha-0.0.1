@@ -10,7 +10,6 @@ var FileSaver = require('file-saver');
 var Web3 = require("web3");
 var web3 = new Web3(new Web3.providers.HttpProvider("https://jsonrpc.egem.io/custom"));
 //var web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/<add your own key kere>'));
-//var web3 = new Web3(new Web3.providers.HttpProvider('https://jsonrpc.ellaism.org'));
 var web3Provider = new ethers.providers.Web3Provider("https://jsonrpc.egem.io/custom");//for ethers
 //var web3 = new Web3(new Web3.providers.HttpProvider(Web3.defaultProvider));
 //var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
@@ -19,18 +18,18 @@ var web3Provider = new ethers.providers.Web3Provider("https://jsonrpc.egem.io/cu
 //components on main wallet meteor page
 Template.body.helpers({
   //returns all the tokens for gerneral price info compared to target currency
-  //hard coded ella for now but may revise for wallet holder to enter any eth fork
+  //hard coded EGEM for now but may revise for wallet holder to enter any eth fork
   tokens() {
     return Tokens.find({});
   },
   //******returns one ticker and is not being used right now**********************
   currentTickerDisplay(){
-    return Tokens.findOne({});
+    return Tokens.findOne({name:"btc"});
     //return "BTC: 0.01";
   },
   //******************************************************************************/
   //returns wallet and balance for now and will be expanded to all wallet info
-  currentElla(){
+  currentEGEM(){
     return Wallets.find();
     //return Wallets.find({}).map(function (a){ return a.qty; });//just some testing code
   },
@@ -44,7 +43,7 @@ Template.body.helpers({
 
 
 Template.body.events({
-  "click [data-action='accbutton/account'],.ella_addr" (event) {
+  "click [data-action='accbutton/account'],.egem_addr" (event) {
     var walletaddr = document.getElementsByClassName("accinput")[0].value.toLowerCase();
     console.log(document.getElementsByClassName("accinput")[0].value + " - " + walletaddr);
 
@@ -109,7 +108,7 @@ Template.body.events({
 genRandomNumbers = function getRandomNumbers() {
   var array = new Uint32Array(10);
   window.crypto.getRandomValues(array);
-  var randText = "Start";
+  var randText = "We began with an Ethereum Base and EtherGem Was Born";
   for (var i = 0; i < array.length; i++) {
     randText += array[i] + " ";
   }
@@ -122,7 +121,7 @@ Template.body.events({
     //writing to tx panel for now eventually to file or save pk not sure yet
     var txPanel = document.getElementById("account_history");
     //need to store the original term and give random options also give user option to make one on their own
-    var privateKeyGeneratorTerm = "May you always"+genRandomNumbers()+"be blessed with Ella"+new Date("YYYY-MM-DDTHH:MM:SSZ")+"Prosperity Happiness and Good Health";
+    var privateKeyGeneratorTerm = "May you always"+genRandomNumbers()+"be blessed with EGEM"+new Date("YYYY-MM-DDTHH:MM:SSZ")+"Prosperity Happiness and Good Health";
     var shuffled = privateKeyGeneratorTerm.split('').sort(function(){return 0.5-Math.random()}).join('');
     privateKeyGeneratorTerm = shuffled;
     var shuffled = privateKeyGeneratorTerm.split('').sort(function(){return 0.5-Math.random()}).join('');
@@ -132,7 +131,6 @@ Template.body.events({
     //return;
     txPanel.innerHTML = "<div>Copy  down this key generation phrase: </div><div>" + privateKeyGeneratorTerm + "</div>";
     console.log("copy  down this key generation phrase: "+privateKeyGeneratorTerm);
-    //txPanel.innerHTML = txPanel.innerHTML + "<div><img src='/img/ella.png' /></div>";
 
     var privateKeyRaw = web3.utils.sha3(privateKeyGeneratorTerm);
     //alert(privateKeyRaw);
@@ -151,25 +149,6 @@ Template.body.events({
     var doc = new Doc();
     var pdfContent = "<html><body><div>"+ txPanel.innerHTML +"</div></body></html>";
     doc.fromHTML(pdfContent, 10, 10, { 'width': 200 });
-
-    /*****images were not working in pdf no matter what i did
-    doc.setFont("arial","bold");
-    doc.setFontSize(12);
-    doc.text(10,20,'Ella Opal Wallet Generation File Version Alpha 0.0.1');
-    doc.setFont("arial");
-    doc.setFontSize(8);
-    console.log(privateKeyGeneratorTerm.length);
-    doc.text(10,40,'Key generation phrase: '+privateKeyGeneratorTerm);
-    doc.text(10,60,'Private Key: '+privateKeyRaw);
-    doc.text(10,80,'Address: '+wallet.address);
-    var img = new Image();
-    img.addEventListener('load', function() {
-        var doc = new jsPDF();
-        doc.addImage(img, 'png', 10, 50);
-    });
-    img.src = '/ui/img/ella.png';
-    //doc.image('/ui/img/ella.png', 0, 15);
-    ******/
 
     doc.save('Wallet'+new Date()+'.pdf');
     //need to remove this return to insert the wallet into mongo and it shows up top
@@ -238,7 +217,7 @@ function toggleDisplay(el,multi,inc,str){
 }
 
 Template.body.events({
-  "click [data-action='send/prepella']" (event) {
+  "click [data-action='send/prepegem']" (event) {
 
     //address to send fromW
     console.log("from: " + document.getElementById("accinput").value + " to: "+ document.getElementById("accsend").value + " we are sending " + document.getElementById("amtsend").value);
@@ -248,11 +227,6 @@ Template.body.events({
     var walletAddress = document.getElementById("accinput").value;
     var amount = web3.utils.toWei(document.getElementById("amtsend").value,'ether');
     console.log("the amount is"+amount);
-
-    //this was the old ether code and I added back in ethers so kep it
-    //var wallet2 = new ethers.Wallet(privateKey);
-    //var providers = new ethers.providers.JsonRpcProvider('https://jsonrpc.ellaism.org');
-    //wallet2.provider = new ethers.providers.JsonRpcProvider('https://jsonrpc.ellaism.org');
 
     var gasPrice = web3.eth.gasPrice;
     //alert(wallet2.provider.chainId);
@@ -328,17 +302,16 @@ Template.body.events({
 });
 
 Template.body.events({
-  'mouseover .ella_addr' (event){
+  'mouseover .egem_addr' (event){
         document.getElementsByClassName("accinput")[0].value = event.target.innerText;
-        //var aa = document.getElementById("btc_prc").innerText;
-        //var bb = document.getElementById("ella_qty_"+event.target.innerText).innerText;
-        var btcPrice = (document.getElementById("btc_prc").innerText * document.getElementById("ella_qty_"+event.target.innerText).innerText);
+
+        var btcPrice = (document.getElementById("btc_prc").innerText * document.getElementById("egem_qty_"+event.target.innerText).innerText);
         document.getElementById("btc").innerText = btcPrice.toPrecision(6);
-        var usdPrice = (document.getElementById("usd_prc").innerText * document.getElementById("ella_qty_"+event.target.innerText).innerText);
+        var usdPrice = (document.getElementById("usd_prc").innerText * document.getElementById("egem_qty_"+event.target.innerText).innerText);
         document.getElementById("usd").innerText = usdPrice.toPrecision(6);
-        var eurPrice = (document.getElementById("eur_prc").innerText * document.getElementById("ella_qty_"+event.target.innerText).innerText);
+        var eurPrice = (document.getElementById("eur_prc").innerText * document.getElementById("egem_qty_"+event.target.innerText).innerText);
         document.getElementById("eur").innerText = eurPrice.toPrecision(6);
-        var ethPrice = (document.getElementById("eth_prc").innerText * document.getElementById("ella_qty_"+event.target.innerText).innerText);
+        var ethPrice = (document.getElementById("eth_prc").innerText * document.getElementById("egem_qty_"+event.target.innerText).innerText);
         document.getElementById("eth").innerText = ethPrice.toPrecision(6);
         //document.getElementById("btc").innerText = "";
   }
@@ -392,8 +365,12 @@ Template.body.events({
 Template.body.events({
   "click [data-action='accbutton/wallet']" : function() {
 
-    //*****************hardcoded for ELLA but will be dynamic in future*********************
-    var url = 'https://min-api.cryptocompare.com/data/price?fsym=ELLA&tsyms=BTC,USD,EUR,ETH';
+    //*****************hardcoded for EGEM but will be dynamic in future*********************
+
+    //var url = 'http://api.egem.io/api/v1/egem_prices/';
+    var url = 'https://graviex.net/api/v2/tickers/egembtc';
+    var url2 = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=BTC,USD,EUR,ETH';
+    var btcprice;
 
     //****removed this option for now*******************************************************
     //options = options || {};
@@ -401,8 +378,41 @@ Template.body.events({
     //if(options.extraParams)
     //    url += '&extraParams='+ options.extraParams;
 
-    //****hijack the function to push ella to mongo******************************************
+    //****hijack the function to push EGEM to mongo******************************************
     var updatePrice = function(e, res){
+
+        if(!e && res && res.statusCode === 200) {
+            var content = JSON.parse(res.content);
+
+            if(content){
+                _.each(content, function(price, key){
+
+                  //console.log("key"+key+"price"+price);
+
+                  if(key=="ticker"){
+                    console.log("last price"+price["last"]);
+                    // make sure its a number and nothing else!
+                    if(_.isFinite(price["last"])) {
+
+                        Meteor.call('tokens.insert', "btc", String(price["last"]));
+                        btcprice = price["last"];
+
+                    }
+
+                  }
+
+
+                });
+            }
+
+            HTTP.get(url2, updatePrice2);
+
+        } else {
+            console.warn('Can not connect to https://mini-api.cryptocompare.com to get price ticker data, please check your internet connection.');
+        }
+    };
+
+    var updatePrice2 = function(e, res){
 
         if(!e && res && res.statusCode === 200) {
             var content = JSON.parse(res.content);
@@ -431,10 +441,10 @@ Template.body.events({
                           price: String(price) // current time
                         });
                         *****/
+                        price = (price*btcprice);
+                        console.log("this price is "+price)
                         Meteor.call('tokens.insert', name, String(price.toPrecision(6)));
-                        //there is a small bug may need to trigger another event to update tickers code below doesnt work
-                        //document.getElementsByClassName('ella_addr')[0].mouseover();
-                        //Template.body.helpers.tokens()
+                        
                     }
 
                 });

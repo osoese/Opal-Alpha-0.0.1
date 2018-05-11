@@ -29,6 +29,8 @@ $meteor
 
 and your cli will direct you to open a browser to localhost:3000 where your app will be running
 
+(if at this point you get errors please see DEBUG section at the bottom of this page)
+
 
 This is the Opal Wallet Alpha release which means it is has features that a developer would use correctly mainly because the developer is only hitting the sequence of buttons to get the desired feature to work. While the developer of this wallet did use it with wallets that held significant enough funds so as to not be reckless, unintended results may happen. Therefore caution is advised. For this reason the local data repository does not hold a private key. This wallet will generate and save the "seed expression" which can derive the private key pretty easily, but it also will generate a PDF printout with the private key and address. Print this and back it up in a safe location (offline). The author's preference would be for you to always save every key offline only using them when needed. The reality is that we have grown accustomed to  keeping wallet accounts on desktops and hardware devices even ones readily connected to the internet. A future release will hold the private keys if a request is made for this function. For now, transactions are forged "offline" and signed with your private key then broadcast to the internet very similarly to if you were using the My Ether Wallet application (or My Ether Wallet on the Ethergem chain).
 
@@ -49,3 +51,13 @@ This is a meteor application very similarly set up to the Mist wallet. You will 
   An electron application wrapper will hold this meteor application in Alpha 0.0.2 but is not being uploaded with this release. The electron wrapper will contain additional functionality and security and will also allow an easy install on multiple client operating systems.
 
   I hope you enjoy this alpha release of the EGEM Opal Wallet version 0.0.1 and that you can see the vision on why the EGEM community needs its own custom wallet and how this humble start can really become something great. If you have any questions or comments please feel free to email me at OSOESE@EGEM.IO or catch the members of EtherGem development team on the public discord at https://discord.gg/msruanZ - where we are always seeking new members for our development team.
+
+  DEBUG Section:
+
+  "Error: Cannot find module '@babel/runtime/helpers/builtin/objectSpread'"
+
+  $meteor npm install @babel/runtime@latest
+
+  then rerun the command to start the process again
+
+  $meteor

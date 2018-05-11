@@ -19,7 +19,7 @@
 
           <div class="accounts_panel">
             <ul class="wallets">
-            {{#each currentElla}}
+            {{#each currentEGEM}}
               {{> wallet}}
             {{/each}}
             </ul>
@@ -62,8 +62,8 @@
           <div class="panel_label">Receiver:</div>
           <input id="accsend" class="accsend" type="text" name="walletdest" />
           <div class="panel_label">Amount to Send: </div>
-          <input id="amtsend" class="amtsend" type="text" name="ellasendqty" />
-          <button type="button" class="btn btn-default" data-action="send/prepella" name="prepsend" value="Prepare Send Tx">
+          <input id="amtsend" class="amtsend" type="text" name="egemsendqty" />
+          <button type="button" class="btn btn-default" data-action="send/prepegem" name="prepsend" value="Prepare Send Tx">
             Prepare
           </button>
           <div class="panel_label">Private Key: </div>
@@ -100,9 +100,9 @@
 
   <li id="wrap_{{public}}">
     <span><input type="checkbox" id="del_{{public}}" data-action="accbutton/settings" /></span>
-    <span class="ella_addr" id="ella_addr_{{public}}">{{public}}</span>
+    <span class="egem_addr" id="egem_addr_{{public}}">{{public}}</span>
      :
-    <span id="ella_qty_{{public}}">{{qty}}</span>
+    <span id="egem_qty_{{public}}">{{qty}}</span>
   </li>
 
 </template>
