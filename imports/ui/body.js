@@ -60,13 +60,6 @@ Template.body.events({
               console.log('Hmm.. there was an error: '+ String(balanceError));
           });
 
-        //alert('before balance');
-        //alert(web3.utils.isBN(web3.eth.getBalance(walletaddr)));
-        //balance = web3.eth.getBalance(walletaddr.toString());
-
-        //console.log("attempting conversion now");
-        //balance = web3.utils.fromWei(balance.toString(),'ether');
-
     }else{
         alert("address is blank or wrong choose enter or loose your choice");
     }
@@ -151,10 +144,6 @@ Template.body.events({
     doc.fromHTML(pdfContent, 10, 10, { 'width': 200 });
 
     doc.save('Wallet'+new Date()+'.pdf');
-    //need to remove this return to insert the wallet into mongo and it shows up top
-    //return;//if testing PDF can skip inserting wallet to local db
-    //end testing PDF
-
 
     Meteor.call('wallets.insert',newWalletAddress,0,privateKeyGeneratorTerm);
   }
@@ -173,42 +162,25 @@ function checkPK(pk){
 
 var elCount = Array(2);
 function toggleDisplay(el,multi,inc,str){
-  console.log(elCount[el.id] + " el-id:" + el.id + " the str: "+str);
-  //console.log("the db entry" + JSON.stringify(Wallets.find({"public":str}).fetch()));
   var testObj = Wallets.find({"public":str}).fetch();
-  console.log("database");
-  //first I will prove correct data set is aquired
-  console.log(JSON.stringify(testObj));
-  //these outputs all show undefined but clearly ae there from the stringiy output
-
-  console.log("IN LIST "+testObj[0]["public"] + "with id of "+testObj[0]["_id"]+ " database save ");
-
 
   if(typeof elCount[el.id] != "undefined"){
-    console.log("here to increment elcount:" + elCount);
+
     var current = elCount[el.id];
     if(inc == "inc"){
       current++;
       Meteor.call('wallets_del.insert',testObj[0]["_id"],testObj[0]["public"]);
     }else{
       current--;
-      //Wallets_del.remove({"_id":testObj[0]["_id"]});
       Meteor.call('wallets_del.remove',testObj[0]["_id"]);
-      console.log("deleted?");
     }
     elCount[el.id] = current;
   }else{
     elCount = [el.id];
     elCount[el.id] = [1];
-    console.log("here to SET elcount:" + elCount[el.id]);
     Meteor.call('wallets_del.insert',testObj[0]["_id"],testObj[0]["public"]);
   };
-  //elCount[el.id] = [0]:elCount[el.id] = elCount[el.id]++
-  console.log("value in first element: "+elCount[el.id]);
   //multi is a flag to see if ther was more than one trigger and some are still open
-  //console.log(el.id + "multi:" +multi);
-  //(multi)?multi=true:multi=false;
-  //console.log(el.id + "multi:" +multi);
   if(elCount[el.id] > 0){
     el.style.visibility = 'visible';
   }else{
@@ -218,8 +190,8 @@ function toggleDisplay(el,multi,inc,str){
 
 Template.body.events({
   "click [data-action='send/prepegem']" (event) {
-
-    //address to send fromW
+    //need to add all console-log comments to a logger that the uer sees
+    //address to send from
     console.log("from: " + document.getElementById("accinput").value + " to: "+ document.getElementById("accsend").value + " we are sending " + document.getElementById("amtsend").value);
 
     var pkSend = document.getElementById("pksend");
@@ -227,34 +199,26 @@ Template.body.events({
     var walletAddress = document.getElementById("accinput").value;
     var amount = web3.utils.toWei(document.getElementById("amtsend").value,'ether');
     console.log("the amount is"+amount);
-
     var gasPrice = web3.eth.gasPrice;
-    //alert(wallet2.provider.chainId);
-
-    // We must pass in the amount as wei (1 ether = 1e18 wei), so we use
-    // this convenience function to convert ether to wei.
     console.log("amount" + amount + ", and estimatedgas: " + gasPrice);
     //nonce
     var number = web3.eth.getTransactionCount(walletAddress);
     console.log("wallet address nonce: "+number); // 1
-
-    console.log("web 3 version: "+Web3.version);//looking for 1.0.0 beta
+    console.log("web 3 version: "+Web3.version);//looking for 1.0.0 beta when written
 
     //need to enter PK now
     if((privateKey == "") || (!checkPK(privateKey))){
       console.log("enter your private key now and then hit send");
-      //var pkSend = document.getElementById("pksend");
       pkSend.removeAttribute("disabled");
       pkSend.focus();
-      document.getElementById("account_history").innerText = "enter private key and prepare again WARNING will send if correct!";
+      document.getElementById("account_history").innerText = "enter private key and hit prepare again to active the send button!";
       return;
       //alert("will be activating the send button when pk enterred and validated");
     }else if(new ethers.Wallet(privateKey).address.toLowerCase() != walletAddress){
-      document.getElementById("account_history").innerText = "private key is not correct for wallet edit and prepare again";
+      document.getElementById("account_history").innerText = "private key is not correct for wallet edit and hit prepare again";
       return;
     }else{
       document.getElementById("pksendbtn").className = "btn btn-positive";
-      //right now just going to send here but need to activate green button as confirmation to send
       //and post the transaction in the innertext next line for confirmation
       document.getElementById("account_history").innerText = "activating Send button....Review your tx then hit send to confirm";
     }
@@ -281,23 +245,6 @@ Template.body.events({
     .catch(function(rawtxError){
         console.log('Hmm.. there was an error: '+ String(rawtxError));
     });
-    /*****test code for alternate trial efforts****************************
-    var transaction = {
-      from: wallet2.address,
-      to: document.getElementById("accsend").value,
-      value: amount,
-      gas: gasPrice,
-      nonce: number
-    };
-    web3.eth.sendTransaction(transaction, function(err, transactionHash) {
-      if (!err){
-        console.log(transactionHash);
-      }else{
-        console.log(err);
-      }
-
-    });
-    *********************************************************************/
   }
 });
 
@@ -313,7 +260,6 @@ Template.body.events({
         document.getElementById("eur").innerText = eurPrice.toPrecision(6);
         var ethPrice = (document.getElementById("eth_prc").innerText * document.getElementById("egem_qty_"+event.target.innerText).innerText);
         document.getElementById("eth").innerText = ethPrice.toPrecision(6);
-        //document.getElementById("btc").innerText = "";
   }
 });
 
@@ -326,7 +272,6 @@ Template.body.events({
     if (!event.target.checked){
       event.target.parentElement.parentElement.style.backgroundColor="#e4ebfd";
     }
-
   },
   "mouseout [data-action='accbutton/settings']" (event){
     //first we can hover and select one or multiple accounts
@@ -335,8 +280,6 @@ Template.body.events({
     if (!event.target.checked){
       event.target.parentElement.parentElement.style.backgroundColor="";
     }
-
-
   },
   "click [data-action='accbutton/settings']" (event){
     if (event.target.checked){
@@ -372,12 +315,6 @@ Template.body.events({
     var url2 = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=BTC,USD,EUR,ETH';
     var btcprice;
 
-    //****removed this option for now*******************************************************
-    //options = options || {};
-
-    //if(options.extraParams)
-    //    url += '&extraParams='+ options.extraParams;
-
     //****hijack the function to push EGEM to mongo******************************************
     var updatePrice = function(e, res){
 
@@ -386,8 +323,6 @@ Template.body.events({
 
             if(content){
                 _.each(content, function(price, key){
-
-                  //console.log("key"+key+"price"+price);
 
                   if(key=="ticker"){
                     console.log("last price"+price["last"]);
@@ -400,7 +335,6 @@ Template.body.events({
                     }
 
                   }
-
 
                 });
             }
@@ -423,28 +357,11 @@ Template.body.events({
 
                     // make sure its a number and nothing else!
                     if(_.isFinite(price)) {
-                        /******
-                        EthTools.ticker.upsert(name, {$set: {
-                            price: String(price),
-                            timestamp: null
-                        }});
-                        *****/
-
-                        /****
-                        var doc = Tokens.findOne({ token: name });
-                        Tokens.upsert({ _id: doc._id }, {$set:{token: name, price: String(price)}});
-                        *****/
-
-                        /*****
-                        Tokens.insert({
-                          token: name,
-                          price: String(price) // current time
-                        });
-                        *****/
+                      
                         price = (price*btcprice);
                         console.log("this price is "+price)
                         Meteor.call('tokens.insert', name, String(price.toPrecision(6)));
-                        
+
                     }
 
                 });
