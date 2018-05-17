@@ -158,6 +158,10 @@ header .hide-completed {
   font-size: 8pt;
 }
 
+.tinyhref {
+  font-size:6px;
+}
+
 .wallets {
   max-height:12vh;
   overflow:auto;

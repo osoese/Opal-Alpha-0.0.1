@@ -38,7 +38,6 @@ Template.body.helpers({
     return Wallets.find({public:addr});
     //return "BTC: 0.01";
   },
-
 });
 
 
@@ -46,9 +45,7 @@ Template.body.events({
   "click [data-action='accbutton/account'],.egem_addr" (event) {
     var walletaddr = document.getElementsByClassName("accinput")[0].value.toLowerCase();
     console.log(document.getElementsByClassName("accinput")[0].value + " - " + walletaddr);
-
     if(walletaddr && (RegExp("^0x[a-fA-F0-9]{40}$").test(walletaddr))){//web3.utils.isAddress(address) can be used
-
         web3.eth.getBalance(walletaddr.toString())
           .then(function(balancewei) {
               var balance = web3.utils.fromWei(balancewei.toString(),'ether');
@@ -59,7 +56,6 @@ Template.body.events({
           .catch(function(balanceError){
               console.log('Hmm.. there was an error: '+ String(balanceError));
           });
-
     }else{
         alert("address is blank or wrong choose enter or loose your choice");
     }
@@ -72,9 +68,7 @@ Template.body.events({
       .catch(function(priceError){
           console.log('Hmm.. there was an error: '+ String(priceError));
       });
-
   }
-
 });
 
 Template.body.events({
@@ -93,7 +87,6 @@ Template.body.events({
     .catch(function(txError){
       console.log("Hmmm there was an error: "+ String(txError));
     });
-
   }
 })
 
@@ -110,7 +103,6 @@ genRandomNumbers = function getRandomNumbers() {
 
 Template.body.events({
   "click [data-action='wallet/create']" (event) {
-
     //writing to tx panel for now eventually to file or save pk not sure yet
     var txPanel = document.getElementById("account_history");
     //need to store the original term and give random options also give user option to make one on their own
@@ -119,12 +111,10 @@ Template.body.events({
     privateKeyGeneratorTerm = shuffled;
     var shuffled = privateKeyGeneratorTerm.split('').sort(function(){return 0.5-Math.random()}).join('');
     privateKeyGeneratorTerm = shuffled;
-    alert(privateKeyGeneratorTerm);
-
-    //return;
-    txPanel.innerHTML = "<div>Copy  down this key generation phrase: </div><div>" + privateKeyGeneratorTerm + "</div>";
+    //alert(privateKeyGeneratorTerm); //no one needs to know this information
+    //removing key generation phrase from the life cycle
+    //txPanel.innerHTML = "<div>Copy  down this key generation phrase: </div><div>" + privateKeyGeneratorTerm + "</div>";
     console.log("copy  down this key generation phrase: "+privateKeyGeneratorTerm);
-
     var privateKeyRaw = web3.utils.sha3(privateKeyGeneratorTerm);
     //alert(privateKeyRaw);
     txPanel.innerHTML = txPanel.innerHTML + "<div>Write ths PK down: </div><div>"+ privateKeyRaw + "</div>";
@@ -135,16 +125,17 @@ Template.body.events({
     alert(newWalletAddress);
     console.log("Write down your address: "+newWalletAddress);
     txPanel.innerHTML = txPanel.innerHTML + "<div>Write down your address: </div><div>" + newWalletAddress + "</div>";
-
-
     //testing write a pdf
     var Doc = require("jsPDF");
     var doc = new Doc();
-    var pdfContent = "<html><body><div>"+ txPanel.innerHTML +"</div></body></html>";
+    var pdfHeader = "<div>OPAL EGEM PAPER WALLET - PRINT AND SAVE THIS FILE</div>";
+    pdfHeader = pdfHeader + "<div>WITHOUT IT YOU WILL LOSE YOUR FUNDS</div>";
+    var pdfContent = "<html><body>"+pdfHeader+"<div>"+ txPanel.innerHTML +"</div></body></html>";
     doc.fromHTML(pdfContent, 10, 10, { 'width': 200 });
-
     doc.save('Wallet'+new Date()+'.pdf');
-
+    txPanel.innerHTML = txPanel.innerHTML + "<div>PRINT AND SAVE THAT FILE RIGHT NOW! This is the only chance you get.</div>";
+    txPanel.innerHTML = txPanel.innerHTML + "<div>If you do not save this information funds from this wallet WILL BE LOST FOR GOOD.</div>";
+    txPanel.innerHTML = txPanel.innerHTML + "<div>You will not be able to recover them ever without this information</div>";
     //removing capability to store prive key generation term
     //Meteor.call('wallets.insert',newWalletAddress,0,privateKeyGeneratorTerm);
     Meteor.call('wallets.insert',newWalletAddress,0);
@@ -165,9 +156,7 @@ function checkPK(pk){
 var elCount = Array(2);
 function toggleDisplay(el,multi,inc,str){
   var testObj = Wallets.find({"public":str}).fetch();
-
   if(typeof elCount[el.id] != "undefined"){
-
     var current = elCount[el.id];
     if(inc == "inc"){
       current++;
@@ -242,7 +231,10 @@ Template.body.events({
     .then(function(rawtx) {
         console.log('Raw TX:'+ rawtx.rawTransaction);
         console.log('sending now');
-        web3.eth.sendSignedTransaction(rawtx.rawTransaction).then(console.log);
+        web3.eth.sendSignedTransaction(rawtx.rawTransaction).then(function(rawTextTx){
+          document.getElementById("account_history").innerHTML = "TxId: <a class='tinyhref' href='https://explorer.egem.io/tx/"+rawTextTx["transactionHash"]+"' target='new'>"+rawTextTx["transactionHash"]+"</a>";
+          console.log(rawTextTx);
+        });
     })
     .catch(function(rawtxError){
         console.log('Hmm.. there was an error: '+ String(rawtxError));
@@ -253,7 +245,6 @@ Template.body.events({
 Template.body.events({
   'mouseover .egem_addr' (event){
         document.getElementsByClassName("accinput")[0].value = event.target.innerText;
-
         var btcPrice = (document.getElementById("btc_prc").innerText * document.getElementById("egem_qty_"+event.target.innerText).innerText);
         document.getElementById("btc").innerText = btcPrice.toPrecision(6);
         var usdPrice = (document.getElementById("usd_prc").innerText * document.getElementById("egem_qty_"+event.target.innerText).innerText);
@@ -309,63 +300,45 @@ Template.body.events({
 
 Template.body.events({
   "click [data-action='accbutton/wallet']" : function() {
-
     //*****************hardcoded for EGEM but will be dynamic in future*********************
-
-    //var url = 'http://api.egem.io/api/v1/egem_prices/';
+    //var url = 'http://api.egem.io/api/v1/egem_prices/';//errors
     var url = 'https://graviex.net/api/v2/tickers/egembtc';
     var url2 = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=BTC,USD,EUR,ETH';
     var btcprice;
-
     //****hijack the function to push EGEM to mongo******************************************
     var updatePrice = function(e, res){
-
         if(!e && res && res.statusCode === 200) {
             var content = JSON.parse(res.content);
-
             if(content){
                 _.each(content, function(price, key){
-
                   if(key=="ticker"){
                     console.log("last price"+price["last"]);
                     // make sure its a number and nothing else!
                     if(_.isFinite(price["last"])) {
-
                         Meteor.call('tokens.insert', "btc", String(price["last"]));
                         btcprice = price["last"];
-
                     }
-
                   }
-
                 });
             }
-
             HTTP.get(url2, updatePrice2);
-
         } else {
             console.warn('Can not connect to https://mini-api.cryptocompare.com to get price ticker data, please check your internet connection.');
         }
     };
 
     var updatePrice2 = function(e, res){
-
         if(!e && res && res.statusCode === 200) {
             var content = JSON.parse(res.content);
-
             if(content){
                 _.each(content, function(price, key){
                     var name = key.toLowerCase();
-
                     // make sure its a number and nothing else!
                     if(_.isFinite(price)) {
-
                         price = (price*btcprice);
                         console.log("this price is "+price)
                         Meteor.call('tokens.insert', name, String(price.toPrecision(6)));
-
                     }
-
                 });
             }
         } else {

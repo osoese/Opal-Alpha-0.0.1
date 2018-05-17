@@ -71,3 +71,13 @@ This is a meteor application. You will begin by either:
   then rerun the command to start the process again
 
   $meteor
+
+  KNOWN BUGS Section:
+
+  "error transaction not mined in 50 blocks"
+
+  The transaction you posted did not get mined in 50 blocks for some reason and this error will be trapped but at this time
+
+  it is wise to just look at the explorer for the transaction id. It will eventually be mined in most cases. The block blockchain
+
+  was just under a heavy load at the time you decided to broadcast.
