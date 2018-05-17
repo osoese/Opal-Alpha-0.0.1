@@ -9,12 +9,12 @@ import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';//need to explore functionallity of check
 
 export const Tokens = new Mongo.Collection('ethereum_price_ticker');//collection for price conversion
-export const Wallets = new Mongo.Collection('ella_wallets');//collection for local wallets
-export const Wallets_del = new Mongo.Collection('ella_wallets_del');
+export const Wallets = new Mongo.Collection('egem_wallets');//collection for local wallets
+export const Wallets_del = new Mongo.Collection('egem_wallets_del');
 //todo need export of local wallets
 
 Meteor.methods({
-  //grabs price conversion for ELLA to foregn currency and can be modified for any ETH (or crypto)
+  //grabs price conversion for EGEM to foregn currency and can be modified for any ETH (or crypto)
   'tokens.insert'(tick, prce) {
     check(tick, String);
     check(prce, String);

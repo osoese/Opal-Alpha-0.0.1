@@ -214,7 +214,7 @@ header .hide-completed {
   margin:3px;
 }
 
-.sendellared {
+.sendegemred {
   color:#cccccc;
   font-weight:bold;
   border:1px solid black;
@@ -224,7 +224,7 @@ header .hide-completed {
   width:auto;
 }
 
-.sendella {
+.sendegem {
   color:#ffffff;
   font-weight:bold;
   border:1px solid black;
@@ -234,7 +234,7 @@ header .hide-completed {
   width:auto;
 }
 
-.prepella {
+.prepegem {
   border:1px solid black;
   background-color: #cccccc;
   padding:3px;
@@ -258,10 +258,10 @@ header .hide-completed {
   width:auto;
 }
 
-.ella_addr {
+.egem_addr {
   --background-color: #ccffeb;
   --font-size:8pt;
 }
-.ella_addr:hover {
+.egem_addr:hover {
   background-color: #66ffd9;
 }
