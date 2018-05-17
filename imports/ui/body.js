@@ -43,6 +43,7 @@ Template.body.helpers({
 
 Template.body.events({
   "click [data-action='accbutton/account'],.egem_addr" (event) {
+    document.getElementsByClassName("accinput")[0].value = event.target.innerText;
     var walletaddr = document.getElementsByClassName("accinput")[0].value.toLowerCase();
     console.log(document.getElementsByClassName("accinput")[0].value + " - " + walletaddr);
     if(walletaddr && (RegExp("^0x[a-fA-F0-9]{40}$").test(walletaddr))){//web3.utils.isAddress(address) can be used
@@ -209,6 +210,7 @@ Template.body.events({
       document.getElementById("account_history").innerText = "private key is not correct for wallet edit and hit prepare again";
       return;
     }else{
+      document.getElementById("pksendbtn").removeAttribute("disabled");
       document.getElementById("pksendbtn").className = "btn btn-positive";
       //and post the transaction in the innertext next line for confirmation
       document.getElementById("account_history").innerText = "activating Send button....Review your tx then hit send to confirm";
@@ -234,9 +236,18 @@ Template.body.events({
         web3.eth.sendSignedTransaction(rawtx.rawTransaction).then(function(rawTextTx){
           document.getElementById("account_history").innerHTML = "TxId: <a class='tinyhref' href='https://explorer.egem.io/tx/"+rawTextTx["transactionHash"]+"' target='new'>"+rawTextTx["transactionHash"]+"</a>";
           console.log(rawTextTx);
+          pkSend.value = "";
+          document.getElementById("pksendbtn").setAttribute("disabled",true);
+          document.getElementById("pksendbtn").className = "btn btn-negative";
+        }).catch(function(rawSendError){
+            //insufficient funds for gas * price + value
+            document.getElementById("account_history").innerHTML = 'Hmm.. there was an error: '+ String(rawSendError);
+            console.log('Hmm.. there was an error: '+ String(rawtxError));
         });
     })
     .catch(function(rawtxError){
+        //insufficient funds for gas * price + value
+        document.getElementById("account_history").innerHTML = 'Hmm.. there was an error: '+ String(rawtxError);
         console.log('Hmm.. there was an error: '+ String(rawtxError));
     });
   }
@@ -244,7 +255,6 @@ Template.body.events({
 
 Template.body.events({
   'mouseover .egem_addr' (event){
-        document.getElementsByClassName("accinput")[0].value = event.target.innerText;
         var btcPrice = (document.getElementById("btc_prc").innerText * document.getElementById("egem_qty_"+event.target.innerText).innerText);
         document.getElementById("btc").innerText = btcPrice.toPrecision(6);
         var usdPrice = (document.getElementById("usd_prc").innerText * document.getElementById("egem_qty_"+event.target.innerText).innerText);

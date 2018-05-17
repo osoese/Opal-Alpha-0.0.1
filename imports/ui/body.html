@@ -48,7 +48,7 @@
         </div>
 
         <div class="wallet_panels">
-          <div class="panel_label">Address to Add / Update Wallet: </div>
+          <div class="panel_label">Address (Send / Add / Update) Wallet(s): </div>
           <input id="accinput" class="accinput" type="text" name="walletaddr" />
           <button type="button" class="btn btn-default" data-action="accbutton/account" name="updacct" value="Update or Add Account">
             Account
@@ -67,8 +67,8 @@
             Prepare
           </button>
           <div class="panel_label">Private Key: </div>
-          <span><input id="pksend" class="pksend" type="text" name="apprvsend" disabled /></span>
-          <button id="pksendbtn" type="button" class="btn btn-negative" data-action="send/pksend" name="pksend" value="Approve Transaction">
+          <span><input id="pksend" class="pksend" type="password" name="apprvsend" disabled /></span>
+          <button id="pksendbtn" type="button" class="btn btn-negative" data-action="send/pksend" name="pksend" value="Approve Transaction" disabled>
             Send
           </button>
         </div>
