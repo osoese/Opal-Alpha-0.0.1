@@ -39,7 +39,7 @@ Meteor.methods({
         {
           public: address,
           qty: coin,
-          hash: hash,
+          //hash: hash,
           time: new Date()
         },
         { upsert: true }

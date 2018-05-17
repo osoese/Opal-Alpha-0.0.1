@@ -145,7 +145,9 @@ Template.body.events({
 
     doc.save('Wallet'+new Date()+'.pdf');
 
-    Meteor.call('wallets.insert',newWalletAddress,0,privateKeyGeneratorTerm);
+    //removing capability to store prive key generation term
+    //Meteor.call('wallets.insert',newWalletAddress,0,privateKeyGeneratorTerm);
+    Meteor.call('wallets.insert',newWalletAddress,0);
   }
 
 });
@@ -357,7 +359,7 @@ Template.body.events({
 
                     // make sure its a number and nothing else!
                     if(_.isFinite(price)) {
-                      
+
                         price = (price*btcprice);
                         console.log("this price is "+price)
                         Meteor.call('tokens.insert', name, String(price.toPrecision(6)));
