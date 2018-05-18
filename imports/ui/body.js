@@ -43,7 +43,9 @@ Template.body.helpers({
 
 Template.body.events({
   "click [data-action='accbutton/account'],.egem_addr" (event) {
-    document.getElementsByClassName("accinput")[0].value = event.target.innerText;
+    if(event.target.id != "add_send_wallet"){
+      document.getElementsByClassName("accinput")[0].value = event.target.innerText;
+    }
     var walletaddr = document.getElementsByClassName("accinput")[0].value.toLowerCase();
     console.log(document.getElementsByClassName("accinput")[0].value + " - " + walletaddr);
     if(walletaddr && (RegExp("^0x[a-fA-F0-9]{40}$").test(walletaddr))){//web3.utils.isAddress(address) can be used
