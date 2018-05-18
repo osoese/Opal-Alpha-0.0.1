@@ -1,6 +1,7 @@
 
 body {
-  --font-family: sans-serif;
+  font-family: Tahoma, Geneva, sans-serif;
+  color:#959fb2;
   background-color: #ffffff;
   --background-image: linear-gradient(to top, #00cc00, #ccffcc 100%);
   --background-attachment: fixed;
@@ -29,6 +30,8 @@ body {
 header {
   background: #f8f8f8;
   border: 1px solid #b3e6cc;
+  border-radius: 0px 0px 10px 10px;
+  box-shadow: 1px 1px 2px #2a56d6, 5px 5px 3px #cccccc;
   margin: 5px;
   --background-image: linear-gradient(to bottom, #8080ff, #e6e6ff 100%);
   padding: 20px 15px 15px 15px;
@@ -68,20 +71,6 @@ form {
   margin-top: 10px;
   margin-bottom: -10px;
   position: relative;
-}
-
-.new-task input {
-  box-sizing: border-box;
-  padding: 10px 0;
-  background: transparent;
-  border: none;
-  width: 100%;
-  padding-right: 80px;
-  font-size: 1em;
-}
-
-.new-task input:focus{
-  outline: 0;
 }
 
 ul {
@@ -201,7 +190,22 @@ header .hide-completed {
   background-color: #f8f8f8;
   padding:10px;
   border: 1px solid #b3e6cc;
+  border-radius: 10px;
+  box-shadow: 1px 1px 2px #2a56d6, 5px 5px 3px #cccccc;
   margin:5px;
+}
+
+.wallet_panels input {
+  padding-left:5px;
+}
+
+.wallet_panels input:focus {
+  font-family: Tahoma, Geneva, sans-serif;
+  color:#0307c1;
+  padding-left:5px;
+  background-color:#d4f7f3;
+  border: 1px solid #b8cffc;
+  box-shadow: 1px 1px #2a56d6
 }
 
 .panel_label {
@@ -268,4 +272,8 @@ header .hide-completed {
 }
 .egem_addr:hover {
   background-color: #66ffd9;
+  font-family: Tahoma, Geneva, sans-serif;
+  color:#0307c1;
+  --margin:3px;
+  padding:5px;
 }
