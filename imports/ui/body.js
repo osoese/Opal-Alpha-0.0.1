@@ -327,11 +327,13 @@ Template.body.events({
     if (event.target.checked){
       toggleDisplay(document.getElementById("events"),"","inc",event.target.id.replace("del_",""));
       console.log("checked account add to list: "+event.target.id+" and "+event.target.parentElement.parentElement.id+"end");
-      event.target.parentElement.parentElement.style.backgroundColor="#8987df";
+      event.target.parentElement.parentElement.style.backgroundColor="#b3c0e0";
+      event.target.parentElement.parentElement.style.color="#0307c1";
     }else{
       toggleDisplay(document.getElementById("events"),"","dec",event.target.id.replace("del_",""));
       console.log("un checked");
       event.target.parentElement.parentElement.style.backgroundColor="#e4ebfd";
+      event.target.parentElement.parentElement.style.color="#959fb2";
     }
 
   },
