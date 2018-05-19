@@ -148,7 +148,8 @@ header .hide-completed {
 }
 
 .tinyhref {
-  font-size:6px;
+  font-size:12px;
+  cursor: pointer;
 }
 
 .wallets {

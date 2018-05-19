@@ -152,8 +152,17 @@ function checkPK(pk){
   if(pk.length == 66){
     console.log("password was 66 characters long: "+pk.length);
     return true;
+  }else if(pk.length == 64){
+    document.getElementById("account_history").innerText = "adding a 0x to the front of your PK - please hit prepare again";
+    console.log("adding a 0x to the front of your PK - please hit prepare again");
+    pk.value = "0x"+pk.value;
+    //console.log(pk.length);
+    document.getElementById("pksend").value = "0x"+document.getElementById("pksend").value;
+    return false;
+    //if(checkPK(pk) == true){ return true; }else{ return false; }
   }else{
     console.log("password NOT 66 characters long: "+pk.length);
+    document.getElementById("account_history").innerText = "adding a 0x to the front of your PK - please hit prepare again";
     return false;
   }
 }
@@ -207,6 +216,7 @@ Template.body.events({
       console.log("enter your private key now and then hit send");
       pkSend.removeAttribute("disabled");
       pkSend.focus();
+      document.getElementById("pkprepbtn").className = "btn btn-positive";
       document.getElementById("account_history").innerText = "enter private key and hit prepare again to active the send button!";
       return;
       //alert("will be activating the send button when pk enterred and validated");
@@ -215,6 +225,7 @@ Template.body.events({
       return;
     }else{
       document.getElementById("pksendbtn").removeAttribute("disabled");
+      document.getElementById("pkprepbtn").className = "btn btn-default";
       document.getElementById("pksendbtn").className = "btn btn-positive";
       //and post the transaction in the innertext next line for confirmation
       document.getElementById("account_history").innerText = "activating Send button....Review your tx then hit send to confirm";
