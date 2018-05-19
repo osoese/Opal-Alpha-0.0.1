@@ -150,8 +150,10 @@ Template.body.events({
 //should also check for ishex and then we check acuatl key to walet below
 function checkPK(pk){
   if(pk.length == 66){
+    console.log("password was 66 characters long: "+pk.length);
     return true;
   }else{
+    console.log("password NOT 66 characters long: "+pk.length);
     return false;
   }
 }
