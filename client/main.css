@@ -209,6 +209,19 @@ header .hide-completed {
   box-shadow: 1px 1px #2a56d6
 }
 
+.wallet_panels_flash {
+  background-color: #f7efb4;
+  padding:10px;
+  border: 1px solid #f41b0c;
+  border-radius: 10px;
+  box-shadow: 2px 2px 3px #f79b61, 6px 6px 4px #e8f762;
+  margin:5px;
+}
+
+.wallet_panels_flash input {
+  padding-left:5px;
+}
+
 .panel_label {
   padding:3px;
 }

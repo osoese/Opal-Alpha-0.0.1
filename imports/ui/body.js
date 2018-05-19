@@ -40,6 +40,12 @@ Template.body.helpers({
   },
 });
 
+function messageAlerts(){
+  document.getElementById("account_history_panel").className = "wallet_panels_flash";
+  document.getElementById("account_history").style.color = "#a51603";
+  setTimeout("document.getElementById('account_history_panel').className = 'wallet_panels';document.getElementById('account_history').style.color = '#959fb2';",3000);
+  return;
+}
 
 Template.body.events({
   "click [data-action='accbutton/account'],.egem_addr" (event) {
@@ -78,13 +84,15 @@ Template.body.events({
   "click [data-action='accbutton/history']" (event) {
     const search_address = document.getElementsByClassName("accinput")[0].value;
     if (search_address == ""){
+      messageAlerts();
       //for now this is to trap no wallet but will get all wallet history in future
       console.log("No address selected....rollover a wallet");
-      document.getElementById("account_history").innerText = "No address selected....rollover a wallet and click again";
+      document.getElementById("account_history").innerText = "No address selected....rollover and click a wallet then click again";
       return
     }
     web3.eth.getTransactionCount(search_address)
     .then(function(tx){
+      messageAlerts();
       document.getElementById("account_history").innerText = "transactions:"+tx;
     })
     .catch(function(txError){
@@ -106,6 +114,7 @@ genRandomNumbers = function getRandomNumbers() {
 
 Template.body.events({
   "click [data-action='wallet/create']" (event) {
+    messageAlerts();
     //writing to tx panel for now eventually to file or save pk not sure yet
     var txPanel = document.getElementById("account_history");
     //need to store the original term and give random options also give user option to make one on their own
@@ -153,6 +162,7 @@ function checkPK(pk){
     console.log("password was 66 characters long: "+pk.length);
     return true;
   }else if(pk.length == 64){
+    messageAlerts();
     document.getElementById("account_history").innerText = "adding a 0x to the front of your PK - please hit prepare again";
     console.log("adding a 0x to the front of your PK - please hit prepare again");
     pk.value = "0x"+pk.value;
@@ -162,6 +172,7 @@ function checkPK(pk){
     //if(checkPK(pk) == true){ return true; }else{ return false; }
   }else{
     console.log("password NOT 66 characters long: "+pk.length);
+    messageAlerts();
     document.getElementById("account_history").innerText = "adding a 0x to the front of your PK - please hit prepare again";
     return false;
   }
@@ -217,10 +228,12 @@ Template.body.events({
       pkSend.removeAttribute("disabled");
       pkSend.focus();
       document.getElementById("pkprepbtn").className = "btn btn-positive";
+      messageAlerts();
       document.getElementById("account_history").innerText = "enter private key and hit prepare again to active the send button!";
       return;
       //alert("will be activating the send button when pk enterred and validated");
     }else if(new ethers.Wallet(privateKey).address.toLowerCase() != walletAddress){
+      messageAlerts();
       document.getElementById("account_history").innerText = "private key is not correct for wallet edit and hit prepare again";
       return;
     }else{
@@ -228,6 +241,7 @@ Template.body.events({
       document.getElementById("pkprepbtn").className = "btn btn-default";
       document.getElementById("pksendbtn").className = "btn btn-positive";
       //and post the transaction in the innertext next line for confirmation
+      messageAlerts();
       document.getElementById("account_history").innerText = "activating Send button....Review your tx then hit send to confirm";
     }
 
@@ -256,6 +270,7 @@ Template.body.events({
         console.log('Raw TX:'+ rawtx.rawTransaction);
         console.log('sending now');
         web3.eth.sendSignedTransaction(rawtx.rawTransaction).then(function(rawTextTx){
+          messageAlerts();
           document.getElementById("account_history").innerHTML = "TxId: <a class='tinyhref' href='https://explorer.egem.io/tx/"+rawTextTx["transactionHash"]+"' target='new'>"+rawTextTx["transactionHash"]+"</a>";
           console.log(rawTextTx);
           pkSend.value = "";
@@ -263,12 +278,14 @@ Template.body.events({
           document.getElementById("pksendbtn").className = "btn btn-negative";
         }).catch(function(rawSendError){
             //insufficient funds for gas * price + value
+            messageAlerts();
             document.getElementById("account_history").innerHTML = 'Hmm.. there was an error: '+ String(rawSendError);
             console.log('Hmm.. there was an error: '+ String(rawtxError));
         });
     })
     .catch(function(rawtxError){
         //insufficient funds for gas * price + value
+        messageAlerts();
         document.getElementById("account_history").innerHTML = 'Hmm.. there was an error: '+ String(rawtxError);
         console.log('Hmm.. there was an error: '+ String(rawtxError));
     });
