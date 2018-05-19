@@ -224,6 +224,13 @@ Template.body.events({
 });
 
 Template.body.events({
+  "click [data-action='show-hide-pk']" (event){
+    if(document.getElementById("pksend").type == "password"){
+      document.getElementById("pksend").type = "text";
+    }else{
+      document.getElementById("pksend").type = "password";
+    }
+  },
   "click [data-action='send/pksend']" (event){
     var amount = web3.utils.toWei(document.getElementById("amtsend").value,'ether');
     var pkSend = document.getElementById("pksend");
