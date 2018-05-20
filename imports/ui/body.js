@@ -15,6 +15,25 @@ var web3Provider = new ethers.providers.Web3Provider("https://jsonrpc.egem.io/cu
 //var web3 = new Web3(Web3.givenProvider || "ws://localhost:8546");
 //console.log(web3.version);
 
+var globalMarkets = "off";
+var globalMarketsTime = "0";
+var autoUpdateMarket = function(start){
+  console.log("the timeout worked. globalMarkets is "+globalMarkets+" and globalMarketsTime = "+globalMarketsTime);
+  if(start){
+    globalMarkets = "on";
+    document.getElementById("globalMarkets").className = "btn btn-positive";
+    globalMarketsTime = 10;
+  }
+  if(globalMarkets == "on" && globalMarketsTime > 0){
+    globalCaller();
+    setTimeout(function(){ autoUpdateMarket(); }, 30000);
+    globalMarketsTime--;
+  }else{
+    globalMarkets == "off";
+    document.getElementById("globalMarkets").className = "btn btn-default";
+  }
+};
+
 //components on main wallet meteor page
 Template.body.helpers({
   //returns all the tokens for gerneral price info compared to target currency
@@ -349,56 +368,64 @@ Template.body.events({
   }
 });
 
+var globalCaller = function() {
+  //*****************hardcoded for EGEM but will be dynamic in future*********************
+  //var url = 'http://api.egem.io/api/v1/egem_prices/';//errors
+  var url = 'https://graviex.net/api/v2/tickers/egembtc';
+  var url2 = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=BTC,USD,EUR,ETH';
+  var btcprice;
+  //****hijack the function to push EGEM to mongo******************************************
+  var updatePrice = function(e, res){
+      if(!e && res && res.statusCode === 200) {
+          var content = JSON.parse(res.content);
+          if(content){
+              _.each(content, function(price, key){
+                if(key=="ticker"){
+                  console.log("last price"+price["last"]);
+                  // make sure its a number and nothing else!
+                  if(_.isFinite(price["last"])) {
+                      Meteor.call('tokens.insert', "btc", String(price["last"]));
+                      btcprice = price["last"];
+                  }
+                }
+              });
+          }
+          HTTP.get(url2, updatePrice2);
+      } else {
+          console.warn('Can not connect to https://mini-api.cryptocompare.com to get price ticker data, please check your internet connection.');
+      }
+  };
+
+  var updatePrice2 = function(e, res){
+      if(!e && res && res.statusCode === 200) {
+          var content = JSON.parse(res.content);
+          if(content){
+              _.each(content, function(price, key){
+                  var name = key.toLowerCase();
+                  // make sure its a number and nothing else!
+                  if(_.isFinite(price)) {
+                      price = (price*btcprice);
+                      console.log("this price is "+price)
+                      Meteor.call('tokens.insert', name, String(price.toPrecision(6)));
+                  }
+              });
+          }
+      } else {
+          console.warn('Can not connect to https://mini-api.cryptocompare.com to get price ticker data, please check your internet connection.');
+      }
+  };
+
+  // update right away
+  HTTP.get(url, updatePrice);
+  if(globalMarkets == "off"){
+    setTimeout(function(){ autoUpdateMarket(true); }, 3000);
+  }
+}
+
 Template.body.events({
   "click [data-action='accbutton/wallet']" : function() {
-    //*****************hardcoded for EGEM but will be dynamic in future*********************
-    //var url = 'http://api.egem.io/api/v1/egem_prices/';//errors
-    var url = 'https://graviex.net/api/v2/tickers/egembtc';
-    var url2 = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=BTC,USD,EUR,ETH';
-    var btcprice;
-    //****hijack the function to push EGEM to mongo******************************************
-    var updatePrice = function(e, res){
-        if(!e && res && res.statusCode === 200) {
-            var content = JSON.parse(res.content);
-            if(content){
-                _.each(content, function(price, key){
-                  if(key=="ticker"){
-                    console.log("last price"+price["last"]);
-                    // make sure its a number and nothing else!
-                    if(_.isFinite(price["last"])) {
-                        Meteor.call('tokens.insert', "btc", String(price["last"]));
-                        btcprice = price["last"];
-                    }
-                  }
-                });
-            }
-            HTTP.get(url2, updatePrice2);
-        } else {
-            console.warn('Can not connect to https://mini-api.cryptocompare.com to get price ticker data, please check your internet connection.');
-        }
-    };
-
-    var updatePrice2 = function(e, res){
-        if(!e && res && res.statusCode === 200) {
-            var content = JSON.parse(res.content);
-            if(content){
-                _.each(content, function(price, key){
-                    var name = key.toLowerCase();
-                    // make sure its a number and nothing else!
-                    if(_.isFinite(price)) {
-                        price = (price*btcprice);
-                        console.log("this price is "+price)
-                        Meteor.call('tokens.insert', name, String(price.toPrecision(6)));
-                    }
-                });
-            }
-        } else {
-            console.warn('Can not connect to https://mini-api.cryptocompare.com to get price ticker data, please check your internet connection.');
-        }
-    };
-
-    // update right away
-    HTTP.get(url, updatePrice);
-
+    if(globalMarkets == "off"){
+      globalCaller();
+    }
   }
 });
