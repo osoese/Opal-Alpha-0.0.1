@@ -321,7 +321,7 @@ h6 {
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
-  cursor: default;
+  cursor: pointer;
   background-image: none;
   border: 1px solid transparent;
   border-radius: 4px;
@@ -387,11 +387,11 @@ h6 {
 
 .btn-positive {
   border-color: #29a03b;
-  border-bottom-color: #71e8bc;
+  border-bottom-color: #248b34;
   background-color: #e5f9e9;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e5f9e9), color-stop(100%, #aef9ba));
-  background-image: -webkit-linear-gradient(top, #e5f9e9 0%, #aef9ba 100%);
-  background-image: linear-gradient(to bottom, #e5f9e9 0%, #aef9ba 100%);
+  background-image: -webkit-linear-gradient(top, #e5f9e9 0%, #2bbc41 100%);
+  background-image: linear-gradient(to bottom, #e5f9e9 0%, #2bbc41 100%);
 }
 .btn-positive:active {
   background-color: #3de556;
@@ -403,10 +403,10 @@ h6 {
 .btn-negative {
   border-color: #fb2f29;
   border-bottom-color: #fb1710;
-  background-color: #fd918d;
+  background-color: #f94a36;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fd918d), color-stop(100%, #fb2f29));
-  background-image: -webkit-linear-gradient(top, #fd918d 0%, #fb2f29 100%);
-  background-image: linear-gradient(to bottom, #fd918d 0%, #fb2f29 100%);
+  background-image: -webkit-linear-gradient(top, #f94a36 0%, #fb2f29 100%);
+  background-image: linear-gradient(to bottom, #f94a36 0%, #fb2f29 100%);
 }
 .btn-negative:active {
   background-color: #fc605b;
@@ -439,6 +439,7 @@ h6 {
   color: #737475;
   font-size: 14px;
   line-height: 1;
+  cursor: pointer;
 }
 
 .btn .icon-text {
@@ -772,8 +773,8 @@ img {
 
 @font-face {
   font-family: "photon-entypo";
-  src: url("/public/fonts/photon-entypo.eot");
-  src: url("/public/fonts/photon-entypo.eot?#iefix") format("eot"), url("/public/fonts/photon-entypo.woff") format("woff"), url("/public/fonts/photon-entypo.ttf") format("truetype");
+  src: url("../fonts/photon-entypo.eot");
+  src: url("../fonts/photon-entypo.eot?#iefix") format("eot"), url("../fonts/photon-entypo.woff") format("woff"), url("../fonts/photon-entypo.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

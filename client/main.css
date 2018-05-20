@@ -226,6 +226,16 @@ header .hide-completed {
   padding:3px;
 }
 
+.out_panel_label {
+  padding:3px;
+  padding-left:15px;
+}
+
+.timer_ctdn {
+  padding-left:5px;
+  color: #e02a1c;
+}
+
 .panel_input {
   padding:3px;
 }

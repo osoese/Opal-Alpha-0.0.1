@@ -16,22 +16,25 @@ var web3Provider = new ethers.providers.Web3Provider("https://jsonrpc.egem.io/cu
 //console.log(web3.version);
 
 var globalMarkets = "off";
-var globalMarketsTime = "0";
+var globalMarketsTime = 0;
 var autoUpdateMarket = function(start){
   console.log("the timeout worked. globalMarkets is "+globalMarkets+" and globalMarketsTime = "+globalMarketsTime);
   if(start){
     globalMarkets = "on";
     document.getElementById("globalMarkets").className = "btn btn-positive";
     globalMarketsTime = 10;
+    document.getElementById("timer_ctdn").innerText = globalMarketsTime;
   }
   if(globalMarkets == "on" && globalMarketsTime > 0){
     globalCaller();
     globalWallets();
     setTimeout(function(){ autoUpdateMarket(); }, 30000);
     globalMarketsTime--;
+    document.getElementById("timer_ctdn").innerText = globalMarketsTime;
   }else{
     globalMarkets = "off";
     document.getElementById("globalMarkets").className = "btn btn-default";
+    document.getElementById("timer_ctdn").innerText = "";
   }
 };
 
@@ -453,8 +456,16 @@ var globalWallets = function(){
 Template.body.events({
   "click [data-action='accbutton/wallet']" : function() {
     console.log("GM "+globalMarkets);
-    if(globalMarkets == "off"){
+    if(globalMarkets == "off" && document.getElementById("timer_ctdn").innerText == ""){
       globalCaller();
+      document.getElementById("timer_ctdn").innerText = parseInt(10);
+      messageAlerts();
+      document.getElementById("account_history").innerText = "Update timer was set to run every 30 seconds "+document.getElementById("timer_ctdn").innerText+" times. Click updater for more time.";
+    }else if(globalMarketsTime < 110 && document.getElementById("timer_ctdn").innerText != "10"){
+      globalMarketsTime = globalMarketsTime+10;
+      document.getElementById("timer_ctdn").innerText = globalMarketsTime;
+      messageAlerts();
+      document.getElementById("account_history").innerText = "Update timer was set to run every 30 seconds "+document.getElementById("timer_ctdn").innerText+" times. Click updater for more time.";
     }
   }
 });
