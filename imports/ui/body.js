@@ -26,6 +26,7 @@ var autoUpdateMarket = function(start){
   }
   if(globalMarkets == "on" && globalMarketsTime > 0){
     globalCaller();
+    globalWallets();
     setTimeout(function(){ autoUpdateMarket(); }, 30000);
     globalMarketsTime--;
   }else{
@@ -420,6 +421,33 @@ var globalCaller = function() {
   if(globalMarkets == "off"){
     setTimeout(function(){ autoUpdateMarket(true); }, 3000);
   }
+}
+
+var globalWallets = function(){
+  var yourWallets = Wallets.find({});
+  //this is the loop
+  yourWallets.forEach( function(walletdata){
+    //looping goes inside here
+    console.log(walletdata.public+ "qty "+walletdata.qty);
+    var walletaddr = walletdata.public;
+    if(walletaddr && (RegExp("^0x[a-fA-F0-9]{40}$").test(walletaddr))){//web3.utils.isAddress(address) can be used
+        web3.eth.getBalance(walletaddr.toString())
+          .then(function(balancewei) {
+              var balance = web3.utils.fromWei(balancewei.toString(),'ether');
+              //up sert into mongo wallet and balance
+              Meteor.call('wallets.insert',walletaddr,balance)
+              console.log('Balance:'+ balance);
+          })
+          .catch(function(balanceError){
+              console.log('Hmm.. there was an error: '+ String(balanceError));
+          });
+    }else{
+        console.log("address was incorrect on update");
+    }
+    //end looping goes inside here
+  });
+  //end the loop
+
 }
 
 Template.body.events({
