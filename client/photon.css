@@ -387,17 +387,17 @@ h6 {
 
 .btn-positive {
   border-color: #29a03b;
-  border-bottom-color: #248b34;
-  background-color: #5bd46d;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #5bd46d), color-stop(100%, #29a03b));
-  background-image: -webkit-linear-gradient(top, #5bd46d 0%, #29a03b 100%);
-  background-image: linear-gradient(to bottom, #5bd46d 0%, #29a03b 100%);
+  border-bottom-color: #71e8bc;
+  background-color: #e5f9e9;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e5f9e9), color-stop(100%, #aef9ba));
+  background-image: -webkit-linear-gradient(top, #e5f9e9 0%, #aef9ba 100%);
+  background-image: linear-gradient(to bottom, #e5f9e9 0%, #aef9ba 100%);
 }
 .btn-positive:active {
-  background-color: #34c84a;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #34c84a), color-stop(100%, #248b34));
-  background-image: -webkit-linear-gradient(top, #34c84a 0%, #248b34 100%);
-  background-image: linear-gradient(to bottom, #34c84a 0%, #248b34 100%);
+  background-color: #3de556;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #3de556), color-stop(100%, #61dd74));
+  background-image: -webkit-linear-gradient(top, #3de556 0%, #61dd74 100%);
+  background-image: linear-gradient(to bottom, #3de556 0%, #61dd74 100%);
 }
 
 .btn-negative {

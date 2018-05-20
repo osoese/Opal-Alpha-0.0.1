@@ -30,7 +30,7 @@ var autoUpdateMarket = function(start){
     setTimeout(function(){ autoUpdateMarket(); }, 30000);
     globalMarketsTime--;
   }else{
-    globalMarkets == "off";
+    globalMarkets = "off";
     document.getElementById("globalMarkets").className = "btn btn-default";
   }
 };
@@ -452,6 +452,7 @@ var globalWallets = function(){
 
 Template.body.events({
   "click [data-action='accbutton/wallet']" : function() {
+    console.log("GM "+globalMarkets);
     if(globalMarkets == "off"){
       globalCaller();
     }
