@@ -84,12 +84,15 @@ Template.body.events({
               //up sert into mongo wallet and balance
               Meteor.call('wallets.insert',walletaddr,balance)
               console.log('Balance:'+ balance);
+              messageAlerts();
+              document.getElementById("account_history").innerText= "address holds "+balance+" EGEM, and is available in your wallet. REMINDER: You still need your private key to access funds";
           })
           .catch(function(balanceError){
               console.log('Hmm.. there was an error: '+ String(balanceError));
           });
     }else{
-        alert("address is blank or wrong choose enter or loose your choice");
+      messageAlerts();
+      document.getElementById("account_history").innerText= "address is blank or wrong choose enter or loose your choice";
     }
 
     web3.eth.getGasPrice()
@@ -110,13 +113,13 @@ Template.body.events({
       messageAlerts();
       //for now this is to trap no wallet but will get all wallet history in future
       console.log("No address selected....rollover a wallet");
-      document.getElementById("account_history").innerText = "No address selected....rollover and click a wallet then click again";
+      document.getElementById("account_history").innerText = "No address selected....rollover and click a wallet then try again";
       return
     }
     web3.eth.getTransactionCount(search_address)
     .then(function(tx){
       messageAlerts();
-      document.getElementById("account_history").innerText = "transactions:"+tx;
+      document.getElementById("account_history").innerHTML = "transactions:"+tx+" <a class='tinyhref' href='https://explorer.egem.io/addr/"+search_address+"' target='new'>"+search_address+"</a>";
     })
     .catch(function(txError){
       console.log("Hmmm there was an error: "+ String(txError));
@@ -285,7 +288,16 @@ Template.body.events({
     var amount = web3.utils.toWei(document.getElementById("amtsend").value,'ether');
     var pkSend = document.getElementById("pksend");
     var privateKey = pkSend.value;
-    alert("You are sending "+amount+".... ....");
+    //alert("You are sending "+amount+".... ....");
+    var r = confirm("Please confirm you are sending "+document.getElementById('amtsend').value+" EGEM.... hit cancel to exit");
+    if (r == true) {
+      messageAlerts();
+      document.getElementById("account_history").innerHTML = "...sending "+document.getElementById("amtsend").value+" EGEM - wait for confirmation... ";
+    } else {
+      messageAlerts();
+      document.getElementById("account_history").innerHTML = "You canceled the transaction at this time. It is still loaded. You can continue, change the amount, or move on.";
+      return false;
+    }
 
     web3.eth.accounts.signTransaction({ to: document.getElementById("accsend").value, value: amount, gas: 2000000 }
     , privateKey)
@@ -361,14 +373,25 @@ Template.body.events({
 
   },
   "click [data-action='accbutton/delete']" (event){
-    console.log("Going to add a confirm function here too but for now we are deleting");
-    var loopDelete = Wallets_del.find().forEach( function(myDoc) {Meteor.call('wallets.remove',myDoc.id);} );
+    var r = confirm("Please confirm you are deleting the selected wallets from your account list. You can easily add them back.... hit cancel to exit with no action");
+    if (r == true) {
+      messageAlerts();
+      document.getElementById("account_history").innerHTML = "Please confirm you are deleting the selected wallets from your account list. You can easily add them back.... hit cancel to exit with no action";
+      var loopDelete = Wallets_del.find().forEach( function(myDoc) {Meteor.call('wallets.remove',myDoc.id);} );
+    } else {
+      messageAlerts();
+      document.getElementById("account_history").innerHTML = "You canceled the deletion at this time. Your selections are still loaded. You can continue, select others, or move on.";
+      return false;
+    }
+
     //while(Wallets_del.find)
   },
   "click [data-action='accbutton/export']" (event){
-    console.log("File exported as Wallet Export.txt save as name of your choice");
-    var blob = new Blob([JSON.stringify(Wallets_del.find())], {type: "text/plain;charset=utf-8"});
-    FileSaver.saveAs(blob, "WalletExport.txt");
+    messageAlerts();
+    document.getElementById("account_history").innerHTML = "This export function is disabled in revision 1 as we do not allow you to save PKs. Look for it in a future release";
+    console.log("File [would have been] exported as Wallet Export.txt save as name of your choice [this function was disabled]");
+    //var blob = new Blob([JSON.stringify(Wallets_del.find())], {type: "text/plain;charset=utf-8"});
+    //FileSaver.saveAs(blob, "WalletExport.txt");
   }
 });
 
