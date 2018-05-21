@@ -155,14 +155,15 @@ Template.body.events({
     console.log("copy  down this key generation phrase: "+privateKeyGeneratorTerm);
     var privateKeyRaw = web3.utils.sha3(privateKeyGeneratorTerm);
     //alert(privateKeyRaw);
-    txPanel.innerHTML = txPanel.innerHTML + "<div>Write ths PK down: </div><div>"+ privateKeyRaw + "</div>";
+    txPanel.innerHTML = "<div style='font-size:11px;'>";
+    txPanel.innerHTML = txPanel.innerHTML + "<div style='font-size:11px;'>Write ths PK down: </div><div style='font-size:13px;'>"+ privateKeyRaw + "</div>";
     console.log("Write ths PK down: "+privateKeyRaw);
     Wallet = ethers.Wallet;
     wallet = new Wallet(privateKeyRaw);
     var newWalletAddress = wallet.address.toLowerCase();
     alert(newWalletAddress);
     console.log("Write down your address: "+newWalletAddress);
-    txPanel.innerHTML = txPanel.innerHTML + "<div>Write down your address: </div><div>" + newWalletAddress + "</div>";
+    txPanel.innerHTML = txPanel.innerHTML + "<div style='font-size:11px;'>Write down your address: </div><div style='font-size:13px;'>" + newWalletAddress + "</div>";
     //testing write a pdf
     var Doc = require("jsPDF");
     var doc = new Doc();
@@ -171,9 +172,10 @@ Template.body.events({
     var pdfContent = "<html><body>"+pdfHeader+"<div>"+ txPanel.innerHTML +"</div></body></html>";
     doc.fromHTML(pdfContent, 10, 10, { 'width': 200 });
     doc.save('Wallet'+new Date()+'.pdf');
-    txPanel.innerHTML = txPanel.innerHTML + "<div>PRINT AND SAVE THAT FILE RIGHT NOW! This is the only chance you get.</div>";
-    txPanel.innerHTML = txPanel.innerHTML + "<div>If you do not save this information funds from this wallet WILL BE LOST FOR GOOD.</div>";
-    txPanel.innerHTML = txPanel.innerHTML + "<div>You will not be able to recover them ever without this information</div>";
+    txPanel.innerHTML = txPanel.innerHTML + "<textarea style='font-size:12px;' cols='80' rows='2' wrap='hard' >private key: "+privateKeyRaw+" address: "+newWalletAddress+"</textarea>";
+    txPanel.innerHTML = txPanel.innerHTML + "<div style='font-size:11px;'>PRINT AND SAVE THAT FILE RIGHT NOW! This is the only chance you get.</div>";
+    txPanel.innerHTML = txPanel.innerHTML + "<div style='font-size:11px;'>If you do not save this information funds from this wallet WILL BE LOST FOR GOOD.</div>";
+    txPanel.innerHTML = txPanel.innerHTML + "<div style='font-size:11px;'>You will not be able to recover them ever without this information</div></div>";
     //removing capability to store prive key generation term
     //Meteor.call('wallets.insert',newWalletAddress,0,privateKeyGeneratorTerm);
     Meteor.call('wallets.insert',newWalletAddress,0);
