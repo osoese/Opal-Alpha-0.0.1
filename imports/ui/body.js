@@ -161,7 +161,7 @@ Template.body.events({
     Wallet = ethers.Wallet;
     wallet = new Wallet(privateKeyRaw);
     var newWalletAddress = wallet.address.toLowerCase();
-    alert(newWalletAddress);
+    //alert(newWalletAddress);
     console.log("Write down your address: "+newWalletAddress);
     txPanel.innerHTML = txPanel.innerHTML + "<div style='font-size:11px;'>Write down your address: </div><div style='font-size:13px;'>" + newWalletAddress + "</div>";
     //testing write a pdf
@@ -170,12 +170,15 @@ Template.body.events({
     var pdfHeader = "<div>OPAL EGEM PAPER WALLET - PRINT AND SAVE THIS FILE</div>";
     pdfHeader = pdfHeader + "<div>WITHOUT IT YOU WILL LOSE YOUR FUNDS</div>";
     var pdfContent = "<html><body>"+pdfHeader+"<div>"+ txPanel.innerHTML +"</div></body></html>";
-    doc.fromHTML(pdfContent, 10, 10, { 'width': 200 });
-    doc.save('Wallet'+new Date()+'.pdf');
+
     txPanel.innerHTML = txPanel.innerHTML + "<textarea style='font-size:12px;' cols='80' rows='2' wrap='hard' >private key: "+privateKeyRaw+" address: "+newWalletAddress+"</textarea>";
     txPanel.innerHTML = txPanel.innerHTML + "<div style='font-size:11px;'>PRINT AND SAVE THAT FILE RIGHT NOW! This is the only chance you get.</div>";
     txPanel.innerHTML = txPanel.innerHTML + "<div style='font-size:11px;'>If you do not save this information funds from this wallet WILL BE LOST FOR GOOD.</div>";
     txPanel.innerHTML = txPanel.innerHTML + "<div style='font-size:11px;'>You will not be able to recover them ever without this information</div></div>";
+
+    doc.fromHTML(pdfContent, 10, 10, { 'width': 200 });
+    doc.save('Wallet'+new Date()+'.pdf');
+
     //removing capability to store prive key generation term
     //Meteor.call('wallets.insert',newWalletAddress,0,privateKeyGeneratorTerm);
     Meteor.call('wallets.insert',newWalletAddress,0);

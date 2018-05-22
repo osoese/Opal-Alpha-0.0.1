@@ -81,3 +81,21 @@ This is a meteor application. You will begin by either:
   it is wise to just look at the explorer for the transaction id. It will eventually be mined in most cases. The block blockchain
 
   was just under a heavy load at the time you decided to broadcast.
+
+  FREQUENT POSSIBLE PROBLEMS:
+
+  Windows:
+
+  "I didn't know where my wallet saved on a windows machine and I did not copy the information as I was instructed"
+
+  You should look for the PDF in the [app data]\Roaming\Opal-Alpha-0.0.1\Downloads folder if it did not default to the downloads section.
+
+  C:\Users\<username>\AppData\Roaming\Opal-Alpha-0.0.1\Downloads
+
+  AppData is a hidden folder under some conditions so you may have to enter the path manually in the windows explorer
+
+  Mac:
+
+  "I cannot copy paste into the electron distribution"
+
+  On mac we do not have a solution for this yet. You should use the meteor version for now.
